@@ -1,0 +1,37 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "terrain3Layers.json",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "": {
+            "scaleInEditor": 1
+        },
+        "terrain3Layers.json": {
+            "scale": 0.9321875,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 319.1418035534697,
+                "y": 313.2417029835736
+            }
+        },
+        "terrain3Layers.json#terrain_atlas": {
+            "scaleInDock": 1
+        }
+    },
+    "last.imagePath": "C:/Users/nicholas.galliano/Desktop/JS/phaser/snake/assets/Tiled",
+    "map.lastUsedFormat": "json",
+    "map.width": 20,
+    "openFiles": [
+        "terrain3Layers.json"
+    ],
+    "project": "snake.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "terrain3Layers.json"
+    ],
+    "tileset.embedInMap": true
+}
