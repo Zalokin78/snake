@@ -27,6 +27,14 @@ class Snake extends Phaser.GameObjects.GameObject {
       null,
       this
     );
+    this.scene.physics.add.collider(
+      this.segments,
+      this.scene.topLayer,
+      this.testFunc2,
+      null,
+      this
+    );
+    console.log(this.scene.topLayer);
 
     this.initialise();
     console.log(this.xPos);
@@ -97,8 +105,14 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.head = this.segments
         .create(this.xPos, this.yPos, "segment")
         .setOrigin(0.5);
-      console.log(this.scene.topLayer);
-      this.scene.physics.add.collider(this.head, this.scene.topLayer);
+      //console.log(this.scene.topLayer);
+      /* this.scene.physics.add.collider(
+        this.head,
+        this.scene.topLayer,
+        this.scene.testFunc2,
+        null,
+        this
+      ); */
     }
 
     if (this.segments.children.entries.length > this.snakeSize) {
@@ -129,7 +143,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   checkCollision(x, y) {
-    console.log(this.scene.topLayer);
+    //console.log(this.scene.topLayer);
     if (this.snakeSize > 2) {
       this.segments.children.entries.forEach((element) => {
         if (element.x == x && element.y == y) {
@@ -145,6 +159,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   eat() {
     this.scene.generateApple();
     this.snakeSize++;
+    alert("EAT!!");
     //this.hasAte = true;
   }
 
@@ -248,11 +263,29 @@ class PlayScene extends Phaser.Scene {
       .setOrigin(0.5, 0.5);
 
     this.generateApple();
+
     this.snakeA.create();
 
     //testing of collisions
     this.testSprite = this.physics.add.sprite(200, 200, "segment");
-    this.physics.add.collider(this.testSprite, this.topLayer);
+    this.physics.add.collider(
+      this.testSprite,
+      this.topLayer,
+      this.testFunc2,
+      null,
+      this
+    );
+    this.snakeA.segments.children.entries.forEach((element) => {
+      console.log(element + "HELLOOOO");
+      this.physics.add.collider(
+        element,
+        this.topLayer,
+        this.testFunc2,
+        null,
+        this
+      );
+    });
+    console.log(this.snakeA);
   }
 
   update(time, delta) {
@@ -329,6 +362,7 @@ class PlayScene extends Phaser.Scene {
 
   testFunc2() {
     console.log("RESTART II!!!!!");
+    alert("Tile collision!!");
   }
 }
 
