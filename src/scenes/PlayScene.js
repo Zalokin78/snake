@@ -144,7 +144,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   gameOver() {
-    alert("GAME OVER");
+    //alert("GAME OVER");
     //console.log(this.segments.children.entries.length);
     //this.lostLife = false;
     this.scene.gameActive = false;
@@ -246,6 +246,7 @@ class PlayScene extends Phaser.Scene {
     //testing of collisions
     this.testSprite = this.physics.add.sprite(200, 200, "segment");
     this.physics.add.collider(this.testSprite, this.topLayer);
+    console.log(this.topLayer);
   }
 
   update(time, delta) {
