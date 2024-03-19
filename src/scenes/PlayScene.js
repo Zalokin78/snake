@@ -94,7 +94,11 @@ class Snake extends Phaser.GameObjects.GameObject {
       //this.initialise();
     }
     if (this.scene.gameActive) {
-      this.segments.create(this.xPos, this.yPos, "segment").setOrigin(0.5);
+      this.head = this.segments
+        .create(this.xPos, this.yPos, "segment")
+        .setOrigin(0.5);
+      console.log(this.scene.topLayer);
+      this.scene.physics.add.collider(this.head, this.scene.topLayer);
     }
 
     if (this.segments.children.entries.length > this.snakeSize) {
@@ -125,6 +129,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   checkCollision(x, y) {
+    console.log(this.scene.topLayer);
     if (this.snakeSize > 2) {
       this.segments.children.entries.forEach((element) => {
         if (element.x == x && element.y == y) {
@@ -208,6 +213,8 @@ class PlayScene extends Phaser.Scene {
   }
 
   create() {
+    this.tileSet();
+    //console.log(this.topLayer);
     //this.testFunc.call(this);
 
     //this.testFunc();
@@ -235,7 +242,7 @@ class PlayScene extends Phaser.Scene {
 
     // this.snakeB.create();
     //debugger;
-    this.tileSet();
+
     this.apple = this.physics.add
       .sprite(this.apple.x, this.apple.y, "apple")
       .setOrigin(0.5, 0.5);
@@ -246,7 +253,6 @@ class PlayScene extends Phaser.Scene {
     //testing of collisions
     this.testSprite = this.physics.add.sprite(200, 200, "segment");
     this.physics.add.collider(this.testSprite, this.topLayer);
-    console.log(this.topLayer);
   }
 
   update(time, delta) {
@@ -303,13 +309,13 @@ class PlayScene extends Phaser.Scene {
     let mappy = this.add.tilemap("mappy");
 
     let terrain = mappy.addTilesetImage("terrain_atlas", "terrain");
-    this.segments = this.physics.add.group();
+    //this.segments = this.physics.add.group();
 
     let botLayer = mappy.createLayer("bot", terrain, 0, 0);
     let grassLayer = mappy.createLayer("grass", terrain, 0, 0);
     this.topLayer = mappy.createLayer("top", terrain, 0, 0);
 
-    this.physics.add.collider(this.snakeA, this.topLayer);
+    //this.physics.add.collider(this.snakeA, this.topLayer);
 
     this.topLayer.setCollisionByProperty({ collides: true });
   }
