@@ -32,6 +32,7 @@ const config = {
     default: "arcade",
     arcade: {
       fps: 10,
+      debug: true,
     },
   },
   scene: [new PlayScene(SHARED_CONFIG)],
