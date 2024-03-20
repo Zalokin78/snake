@@ -6,7 +6,15 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.segments = null;
     this.snakeSize = 2;
   }
+  preload() {
+    this.load.image("segment", "assets/snake16.png");
+  }
   create() {
+    for (i = 0; i++; i < this.snakeSize) {
+      this.head = this.segments
+        .create(this.xPos, this.yPos, "segment")
+        .setOrigin(0.5);
+    }
     //this.scene.testFunc.call(this);
   }
   update() {}
