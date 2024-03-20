@@ -4,20 +4,68 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.snakeSize = 2;
+    this.snakeSize = 5;
+    this.xPos = 100;
+    this.yPos = 100;
+    this.segments = this.scene.physics.add.group();
+    this.movements = [];
   }
   preload() {
     this.load.image("segment", "assets/snake16.png");
   }
   create() {
-    for (i = 0; i++; i < this.snakeSize) {
-      this.head = this.segments
-        .create(this.xPos, this.yPos, "segment")
-        .setOrigin(0.5);
+    for (let i = 0; i < this.snakeSize; i++) {
+      this.segments.create(this.xPos, this.yPos, "segment").setOrigin(0.5);
+      this.xPos -= 16;
+      this.movements.push([]);
     }
-    //this.scene.testFunc.call(this);
+    this.indSegments = this.segments.children.entries;
+    this.head = this.indSegments[0];
+    console.log(this.movements);
+
+    this.cursors = this.scene.input.keyboard.createCursorKeys();
+
+    console.log(this.segments);
   }
-  update() {}
+
+  update() {
+    if (this.cursors.up.isDown == true) {
+      this.head.setVelocityY(-100);
+      this.head.setVelocityX(0);
+
+      this.movements.forEach((element) => {
+        element.push({ direction: "u" });
+        console.log(element);
+      });
+    }
+    if (this.cursors.down.isDown == true) {
+      this.head.setVelocityY(100);
+      this.head.setVelocityX(0);
+
+      this.movements.forEach((element) => {
+        element.push({ direction: "d" });
+        console.log(element);
+      });
+    }
+    if (this.cursors.left.isDown == true) {
+      this.head.setVelocityX(-100);
+      this.head.setVelocityY(0);
+
+      this.movements.forEach((element) => {
+        element.push({ direction: "l" });
+        console.log(element);
+      });
+    }
+    if (this.cursors.right.isDown == true) {
+      this.head.setVelocityX(100);
+      this.head.setVelocityY(0);
+
+      this.movements.forEach((element) => {
+        element.push({ direction: "r" });
+        console.log(element);
+      });
+    }
+  }
 
   checkCollision(x, y) {
     //console.log(this.scene.topLayer);
@@ -57,54 +105,22 @@ class PlayScene extends Phaser.Scene {
   }
 
   create() {
-    //console.log(this.topLayer);
-    //this.testFunc.call(this);
-
-    //this.testFunc();
-
-    //this.physics.add.collider(this.segments, this.apple, this.eat, null, this);
-
     this.WKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     this.SKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.AKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     this.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-
-    this.cursors = this.input.keyboard.createCursorKeys();
 
     //this.initialise();
 
     this.snakeA = new Snake(this);
     console.log(this.snakeA);
     this.add.existing(this.snakeA);
-    // this.snakeB = new Snake(this);
-    // this.add.existing(this.snakeB);
-
-    // this.snakeB.create();
-    //debugger;
 
     this.snakeA.create();
-
-    //testing of collisions
   }
 
   update(time, delta) {
-    //-----
-    //testSprite movement
-
-    if (this.cursors.up.isDown == true) {
-      this.testSprite.setVelocityY(-100);
-    }
-    if (this.cursors.down.isDown == true) {
-      this.testSprite.setVelocityY(100);
-    }
-    if (this.cursors.left.isDown == true) {
-      this.testSprite.setVelocityX(-100);
-    }
-    if (this.cursors.right.isDown == true) {
-      this.testSprite.setVelocityX(100);
-    }
-
-    //end of testSprite movement
+    this.snakeA.update();
   }
 }
 export default PlayScene;
