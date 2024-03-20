@@ -23,7 +23,10 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.indSegments = this.segments.children.entries;
     this.head = this.indSegments[0];
     //this.head.distance = [{ PosX: 0, posY: 0, yDist: 0 }];
-    this.head.distance = [];
+    this.head.distance = [
+      [{ posX: 0 }, { posY: 0 }],
+      [{ posX: 0 }, { posY: 0 }],
+    ];
     console.log(this.head);
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
