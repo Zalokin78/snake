@@ -6,9 +6,10 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.segments = null;
     this.snakeSize = 5;
     this.xPos = 100;
-    this.yPos = 100;
+    this.yPos = 400;
     this.segments = this.scene.physics.add.group();
     this.movements = [];
+    this.inputFlag = true;
   }
   preload() {
     this.load.image("segment", "assets/snake16.png");
@@ -21,7 +22,9 @@ class Snake extends Phaser.GameObjects.GameObject {
     }
     this.indSegments = this.segments.children.entries;
     this.head = this.indSegments[0];
-    console.log(this.movements);
+    //this.head.distance = [{ PosX: 0, posY: 0, yDist: 0 }];
+    this.head.distance = [];
+    console.log(this.head);
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
 
@@ -29,7 +32,24 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   update() {
+    console.log(this.head.distance.length);
     if (this.cursors.up.isDown == true) {
+      this.head.distance.push({
+        yPos: this.head.y,
+        length: this.head.distance.length /* 
+        yDist:
+          this.head.distance.length > 0
+            ? this.head.distance[this.head.distance.length - 1].yPos  -
+              this.head.distance[this.head.distance.length-2].yPos
+            : "warra", */,
+      });
+      /* if (this.head.distance.length > 0) {
+        this.head.distance.push({
+          distY: this.head.distance.length,
+          // this.head.distance[this.head.distance.length].yPos -
+          // this.head.distance[this.head.distance.length - 1].yPos,
+        }); */
+
       this.head.setVelocityY(-100);
       this.head.setVelocityX(0);
 
@@ -37,6 +57,7 @@ class Snake extends Phaser.GameObjects.GameObject {
         element.push({ direction: "u" });
         console.log(element);
       });
+      console.log(this.head.distance);
     }
     if (this.cursors.down.isDown == true) {
       this.head.setVelocityY(100);
