@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 //##before staging
+//##after staging
 
 class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
