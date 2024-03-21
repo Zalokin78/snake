@@ -25,10 +25,12 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.indSegments = this.segments.children.entries;
     this.head = this.indSegments[0];
     //this.head.distance = [{ PosX: 0, posY: 0, yDist: 0 }];
-    this.head.distance = [
-      [{ posX: 0 }, { posY: 0 }],
-      [{ posX: 0 }, { posY: 0 }],
-    ];
+    this.head.distance = {
+      posXStart: this.head.x,
+      posXEnd: this.head.x,
+      posYStart: this.head.y,
+      posYEnd: this.head.y,
+    };
     console.log(this.head);
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
@@ -37,60 +39,87 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   update() {
-    console.log(this.head.distance.length);
+    // console.log(this.head.distance.length);
     if (this.cursors.up.isDown == true) {
-      this.head.distance.push({
-        yPos: this.head.y,
-        length: this.head.distance.length /* 
-        yDist:
-          this.head.distance.length > 0
-            ? this.head.distance[this.head.distance.length - 1].yPos  -
-              this.head.distance[this.head.distance.length-2].yPos
-            : "warra", */,
-      });
-      /* if (this.head.distance.length > 0) {
-        this.head.distance.push({
-          distY: this.head.distance.length,
-          // this.head.distance[this.head.distance.length].yPos -
-          // this.head.distance[this.head.distance.length - 1].yPos,
-        }); */
-
       this.head.setVelocityY(-100);
       this.head.setVelocityX(0);
 
-      this.movements.forEach((element) => {
+      this.recordMovements();
+
+      /* this.movements.forEach((element) => {
         element.push({ direction: "u" });
         console.log(element);
-      });
-      console.log(this.head.distance);
+      }); */
     }
     if (this.cursors.down.isDown == true) {
       this.head.setVelocityY(100);
       this.head.setVelocityX(0);
 
-      this.movements.forEach((element) => {
+      this.recordMovements();
+
+      /* this.movements.forEach((element) => {
         element.push({ direction: "d" });
         console.log(element);
-      });
+      }); */
     }
     if (this.cursors.left.isDown == true) {
       this.head.setVelocityX(-100);
       this.head.setVelocityY(0);
 
-      this.movements.forEach((element) => {
+      this.recordMovements();
+      /* this.movements.forEach((element) => {
         element.push({ direction: "l" });
         console.log(element);
-      });
+      }); */
     }
     if (this.cursors.right.isDown == true) {
       this.head.setVelocityX(100);
       this.head.setVelocityY(0);
 
-      this.movements.forEach((element) => {
+      this.recordMovements();
+      /* this.movements.forEach((element) => {
         element.push({ direction: "r" });
         console.log(element);
-      });
+      }); */
     }
+  }
+
+  recordMovements() {
+    //test whether it's the inital position, if so, do not execute
+    let values = Object.values(this.head.distance);
+    let flag;
+
+    if ((values[0] == values[1]) & (values[2] == values[3])) {
+      flag = true;
+    }
+    console.log(this.head.distance);
+    console.log(flag);
+
+    /* const allEqual = (arr) => values.arr((v) => v === arr[0]);
+    console.log(allEqual(values)); */
+
+    //update distance range
+    this.head.distance.posXEnd = this.head.x;
+    this.head.distance.posYEnd = this.head.y;
+
+    //console.log(this.head.distance);
+    //record head.distances into array
+    this.movements.forEach((element) => {
+      element.push({
+        xDist: this.head.distance.posXEnd - this.head.distance.posXStart,
+        yDist: this.head.distance.posYEnd - this.head.distance.posYStart,
+      });
+      //console.log(element);
+    });
+
+    //push(this.head.distance);
+    //reset distance markers
+    //console.log(this.head.distance);
+    this.head.distance.posXStart = this.head.distance.posXEnd;
+    this.head.distance.posYStart = this.head.distance.posYEnd;
+    //console.log(this.head.distance);
+
+    //console.log(this.movements);
   }
 
   checkCollision(x, y) {
