@@ -9,28 +9,32 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.yPos = 400;
     this.segments = this.scene.physics.add.group();
   }
-  preload() {
-    this.load.image("segment", "assets/snake16.png");
-  }
+  /*  preload() {
+    this.image = this.load.image("segment", "assets/snake16Arrow.png");
+    debugger;
+  } */
   create() {
     /* for (let i = 0; i < this.snakeSize; i++) {
       this.segments.create(this.xPos, this.yPos, "segment").setOrigin(0.5);
       this.xPos -= 16;
       this.movements.push([]);
     } */
+    this.head = this.scene.physics.add.sprite(200, 200, "segment");
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
   }
 
   update() {
     // console.log(this.head.distance.length);
-    if (this.cursors.up.isDown == true) {
-    }
+    this.head.setVelocityX(10);
+
     if (this.cursors.down.isDown == true) {
     }
     if (this.cursors.left.isDown == true) {
+      this.head.angle -= 20;
     }
     if (this.cursors.right.isDown == true) {
+      this.head.angle += 20;
     }
   }
 }
@@ -51,7 +55,9 @@ class PlayScene extends Phaser.Scene {
 
     //this.inputReady = true;
   }
-  preload() {}
+  preload() {
+    this.load.image("segment", "assets/snake16Arrow.png");
+  }
 
   create() {
     this.WKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
