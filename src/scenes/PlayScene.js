@@ -12,6 +12,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   /*  preload() {
     this.image = this.load.image("segment", "assets/snake16Arrow.png");
     debugger;
+    blah
   } */
   create() {
     /* for (let i = 0; i < this.snakeSize; i++) {
@@ -19,23 +20,45 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.xPos -= 16;
       this.movements.push([]);
     } */
-    this.head = this.scene.physics.add.sprite(200, 200, "segment");
+    this.head = this.scene.physics.add
+      .sprite(200, 200, "segment")
+      .setVelocity(100, 0);
 
-    this.cursors = this.scene.input.keyboard.createCursorKeys();
+    //this.cursors = this.scene.input.keyboard.createCursorKeys();
+
+    /*this.input.keyboard
+    .on('keydown-LEFT', () => { this.plane.setAngularVelocity(-60); })
+    .on('keydown-UP', () => { this.plane.setAngularVelocity(0); });
+  }*/
+
+    this.scene.input.keyboard.on("keydown-LEFT", () => {
+      this.head.setAngularVelocity(-100);
+    });
+    this.scene.input.keyboard.on("keydown-RIGHT", () => {
+      this.head.setAngularVelocity(100);
+    });
   }
 
   update() {
-    // console.log(this.head.distance.length);
-    this.head.setVelocityX(10);
+    this.scene.physics.velocityFromAngle(
+      this.head.angle,
+      150,
+      this.head.body.velocity
+    );
 
-    if (this.cursors.down.isDown == true) {
+    // console.log(this.head.distance.length);
+    //this.head.setVelocityX(10);
+    //this.head.rotation = this.head.angle;
+    //velocityFromAngle(45, 200, null);
+
+    /* if (this.cursors.down.isDown == true) {
     }
     if (this.cursors.left.isDown == true) {
-      this.head.angle -= 20;
+      this.head.setAngularVelocity(-50);
     }
     if (this.cursors.right.isDown == true) {
-      this.head.angle += 20;
-    }
+      this.head.setAngularVelocity(50);
+    } */
   }
 }
 

@@ -24,14 +24,14 @@ const SHARED_CONFIG = {
 const config = {
   type: Phaser.AUTO,
   ...SHARED_CONFIG,
-  fps: {
+  /*  fps: {
     target: 10,
     forceSetTimeOut: true,
-  },
+  }, */
   physics: {
     default: "arcade",
     arcade: {
-      fps: 10,
+      //fps: 10,
       debug: true,
     },
   },
