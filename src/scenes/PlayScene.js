@@ -8,16 +8,23 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.xPos = 100;
     this.yPos = 400;
     this.segments = this.scene.physics.add.group();
-    this.timeSwitch = true;
-    this.delayTime = null;
-    this.delayedSegment = null;
+    this.segmentsRecord = [];
+    this.index = 0;
+    this.stutteredIndex = null;
+    this.modulus = 0;
+    this.indexOffset = 0;
+    this.maxOffset = 0;
   }
+
   /*  preload() {
     this.image = this.load.image("segment", "assets/snake16Arrow.png");
     debugger;
     blah
   } */
   create() {
+    for (let i = 0; i < 100; i++) {
+      this.segmentsRecord.push({});
+    }
     /* for (let i = 0; i < this.snakeSize; i++) {
       this.segments.create(this.xPos, this.yPos, "segment").setOrigin(0.5);
       this.xPos -= 16;
@@ -47,45 +54,31 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   update() {
-    if (this.timeSwitch) {
-      this.delayTime =
-        this.scene.game.loop.time * this.scene.game.loop.delta + 2000;
+    this.segmentsRecord[this.modulus] = { x: this.head.x, y: this.head.y };
+    this.modulus = this.index++ % 100; //revert to the normal if statement i think...
+    //if (this.index == this.segmentsRecord.length) this.index = 0;
+    console.log(this.segmentsRecord);
 
-      this.timeSwitch = false;
-      //debugger;
-    }
-    this.delayedSegment = { x: this.head.x, y: this.head.y };
-    if (
-      this.scene.game.loop.time * this.scene.game.loop.delta >=
-      this.delayTime
-    ) {
-      console.log("YOU'RE DELAYED!!!!!");
-      this.segment.x = this.delayedSegment.x;
-      this.segment.y = this.delayedSegment.y;
-      this.timeSwitch = true;
-    }
     //console.log("hello");
-
+    //make the head move
     this.scene.physics.velocityFromAngle(
       this.head.angle,
       150,
       this.head.body.velocity
     );
 
-    //console.log(this.scene.time);
-    // console.log(this.head.distance.length);
-    //this.head.setVelocityX(10);
-    //this.head.rotation = this.head.angle;
-    //velocityFromAngle(45, 200, null);
+    this.segment.x =
+      this.segmentsRecord[
+        (this.index - this.maxOffset) % this.segmentsRecord.length
+      ].x;
+    this.segment.y =
+      this.segmentsRecord[
+        (this.index - this.maxOffset) % this.segmentsRecord.length
+      ].y;
 
-    /* if (this.cursors.down.isDown == true) {
-    }
-    if (this.cursors.left.isDown == true) {
-      this.head.setAngularVelocity(-50);
-    }
-    if (this.cursors.right.isDown == true) {
-      this.head.setAngularVelocity(50);
-    } */
+    this.maxOffset++;
+
+    if (this.maxOffset > 10) this.maxOffset = 10;
   }
 }
 
@@ -100,10 +93,6 @@ class PlayScene extends Phaser.Scene {
     this.SKey = null;
     this.AKey = null;
     this.DKey = null;
-
-    //this.snakeSize = 2;
-
-    //this.inputReady = true;
   }
   preload() {
     this.load.image("segment", "assets/snake16Arrow.png");
