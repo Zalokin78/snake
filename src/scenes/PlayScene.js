@@ -4,7 +4,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.snakeSize = 2;
+    this.snakeSize = 10;
     this.xPos = 200;
     this.yPos = 200;
     this.segments = this.scene.physics.add.group();
@@ -14,17 +14,25 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.modulus = 0;
     this.indexOffset = 0;
     this.maxOffset = 0;
-    this.initOffset = 9;
+    this.initOffset = 15;
     this.offset = this.initOffset;
+    this.segmentsRecordSize = 200;
   }
 
-  preload() {
+  /*  preload() {
     this.image = this.load.image("segment", "assets/snake16Arrow.png");
-  }
+    debugger;
+    blah
+  } */
   create() {
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < this.segmentsRecordSize; i++) {
       this.segmentsRecord.push({ x: this.xPos + i, y: this.yPos });
     }
+
+    this.head = this.scene.physics.add
+      .sprite(this.xPos, this.yPos, "segment")
+      .setVelocity(100, 0);
+
     for (let i = 0; i < this.snakeSize; i++) {
       this.segments
         .create(this.xPos + this.offset, this.yPos, "segment")
@@ -37,13 +45,6 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.offset = this.initOffset;
     //console.log(this.segments);
     //debugger;
-    /* this.head = this.scene.physics.add
-      .sprite(this.xPos, this.yPos, 200, "segment")
-      .setVelocity(100, 0); */
-    this.head = this.segments.children.entries[0];
-    this.head = this.scene.physics.add
-      .sprite(this.xPos, this.yPos, 200, "segment")
-      .setVelocity(100, 0);
 
     this.scene.input.keyboard.on("keydown-LEFT", () => {
       this.head.setAngularVelocity(-100);
@@ -56,7 +57,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   update() {
     this.scene.physics.velocityFromAngle(
       this.head.angle,
-      150,
+      100,
       this.head.body.velocity
     );
 
