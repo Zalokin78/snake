@@ -4,7 +4,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.snakeSize = 5;
+    this.snakeSize = 2;
     this.xPos = 200;
     this.yPos = 200;
     this.segments = this.scene.physics.add.group();
@@ -14,39 +14,36 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.modulus = 0;
     this.indexOffset = 0;
     this.maxOffset = 0;
+    this.initOffset = 9;
+    this.offset = this.initOffset;
   }
 
-  /*  preload() {
+  preload() {
     this.image = this.load.image("segment", "assets/snake16Arrow.png");
-    debugger;
-    blah
-  } */
+  }
   create() {
     for (let i = 0; i < 100; i++) {
-      this.segmentsRecord.push({});
+      this.segmentsRecord.push({ x: this.xPos + i, y: this.yPos });
     }
     for (let i = 0; i < this.snakeSize; i++) {
-      this.segments.create(this.xPos, this.yPos, "segment").setOrigin(0.5);
+      this.segments
+        .create(this.xPos + this.offset, this.yPos, "segment")
+        .setOrigin(0.5);
 
       //this.xPos -= 16;
       //this.movements.push([]);
+      this.offset += this.initOffset;
     }
+    this.offset = this.initOffset;
     //console.log(this.segments);
     //debugger;
+    /* this.head = this.scene.physics.add
+      .sprite(this.xPos, this.yPos, 200, "segment")
+      .setVelocity(100, 0); */
+    this.head = this.segments.children.entries[0];
     this.head = this.scene.physics.add
       .sprite(this.xPos, this.yPos, 200, "segment")
       .setVelocity(100, 0);
-
-    /* this.segment = this.scene.physics.add
-      .sprite(this.xPos, this.yPos, "segment")
-      .setVelocity(0, 0); */
-
-    //this.cursors = this.scene.input.keyboard.createCursorKeys();
-
-    /*this.input.keyboard
-    .on('keydown-LEFT', () => { this.plane.setAngularVelocity(-60); })
-    .on('keydown-UP', () => { this.plane.setAngularVelocity(0); });
-  }*/
 
     this.scene.input.keyboard.on("keydown-LEFT", () => {
       this.head.setAngularVelocity(-100);
@@ -57,54 +54,21 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   update() {
-    //add the head segment posX and posY to arrays record
-    this.segmentsRecord[this.modulus] = { x: this.head.x, y: this.head.y };
-    //if (this.index == this.segmentsRecord.length) this.index = 0;
-    console.log(this.segmentsRecord);
-
-    //console.log("hello");
-    //make the head move
     this.scene.physics.velocityFromAngle(
       this.head.angle,
       150,
       this.head.body.velocity
     );
-    this.test =
-      this.index -
-      this.maxOffset -
-      ((this.index % this.snakeSize) % this.segmentsRecord.length);
 
-    console.log(this.segmentsRecord[this.test].x);
-    //debugger;
+    this.segmentsRecord.unshift({ x: this.head.x, y: this.head.y });
+    this.segmentsRecord.pop();
+
     this.segments.children.entries.forEach((element) => {
-      element.x =
-        this.segmentsRecord[
-          (this.index - this.maxOffset - (this.index % this.snakeSize)) %
-            this.segmentsRecord.length
-        ].x;
-      element.y =
-        this.segmentsRecord[
-          (this.index - this.maxOffset - (this.index % this.snakeSize)) %
-            this.segmentsRecord.length
-        ].y;
-      //debugger;
-      console.log(element.x);
-      console.log(element.y);
+      element.x = this.segmentsRecord[this.offset].x;
+      element.y = this.segmentsRecord[this.offset].y;
+      this.offset += this.initOffset;
     });
-    /* this.segment.x =
-      this.segmentsRecord[
-        (this.index - this.maxOffset) % this.segmentsRecord.length
-      ].x;
-    this.segment.y =
-      this.segmentsRecord[
-        (this.index - this.maxOffset) % this.segmentsRecord.length
-      ].y;
- */ this.index++;
-    this.modulus = this.index % this.segmentsRecord.length;
-    this.maxOffset++;
-
-    if (this.maxOffset > 10) this.maxOffset = 10;
-    debugger;
+    this.offset = this.initOffset;
   }
 }
 
