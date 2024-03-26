@@ -5,8 +5,8 @@ class Snake extends Phaser.GameObjects.GameObject {
     super(scene);
     this.segments = null;
     this.snakeSize = 5;
-    this.xPos = 100;
-    this.yPos = 400;
+    this.xPos = 200;
+    this.yPos = 200;
     this.segments = this.scene.physics.add.group();
     this.segmentsRecord = [];
     this.index = 0;
@@ -25,18 +25,21 @@ class Snake extends Phaser.GameObjects.GameObject {
     for (let i = 0; i < 100; i++) {
       this.segmentsRecord.push({});
     }
-    /* for (let i = 0; i < this.snakeSize; i++) {
+    for (let i = 0; i < this.snakeSize; i++) {
       this.segments.create(this.xPos, this.yPos, "segment").setOrigin(0.5);
-      this.xPos -= 16;
-      this.movements.push([]);
-    } */
+
+      //this.xPos -= 16;
+      //this.movements.push([]);
+    }
+    //console.log(this.segments);
+    //debugger;
     this.head = this.scene.physics.add
-      .sprite(200, 200, "segment")
+      .sprite(this.xPos, this.yPos, 200, "segment")
       .setVelocity(100, 0);
 
-    this.segment = this.scene.physics.add
-      .sprite(200, 200, "segment")
-      .setVelocity(0, 0);
+    /* this.segment = this.scene.physics.add
+      .sprite(this.xPos, this.yPos, "segment")
+      .setVelocity(0, 0); */
 
     //this.cursors = this.scene.input.keyboard.createCursorKeys();
 
@@ -54,8 +57,8 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   update() {
+    //add the head segment posX and posY to arrays record
     this.segmentsRecord[this.modulus] = { x: this.head.x, y: this.head.y };
-    this.modulus = this.index++ % 100; //revert to the normal if statement i think...
     //if (this.index == this.segmentsRecord.length) this.index = 0;
     console.log(this.segmentsRecord);
 
@@ -66,8 +69,29 @@ class Snake extends Phaser.GameObjects.GameObject {
       150,
       this.head.body.velocity
     );
+    this.test =
+      this.index -
+      this.maxOffset -
+      ((this.index % this.snakeSize) % this.segmentsRecord.length);
 
-    this.segment.x =
+    console.log(this.segmentsRecord[this.test].x);
+    //debugger;
+    this.segments.children.entries.forEach((element) => {
+      element.x =
+        this.segmentsRecord[
+          (this.index - this.maxOffset - (this.index % this.snakeSize)) %
+            this.segmentsRecord.length
+        ].x;
+      element.y =
+        this.segmentsRecord[
+          (this.index - this.maxOffset - (this.index % this.snakeSize)) %
+            this.segmentsRecord.length
+        ].y;
+      //debugger;
+      console.log(element.x);
+      console.log(element.y);
+    });
+    /* this.segment.x =
       this.segmentsRecord[
         (this.index - this.maxOffset) % this.segmentsRecord.length
       ].x;
@@ -75,10 +99,12 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.segmentsRecord[
         (this.index - this.maxOffset) % this.segmentsRecord.length
       ].y;
-
+ */ this.index++;
+    this.modulus = this.index % this.segmentsRecord.length;
     this.maxOffset++;
 
     if (this.maxOffset > 10) this.maxOffset = 10;
+    debugger;
   }
 }
 
