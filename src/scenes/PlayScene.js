@@ -4,7 +4,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.snakeSize = 10;
+    this.snakeSize = 20;
     this.xPos = 200;
     this.yPos = 200;
     this.segments = this.scene.physics.add.group();
@@ -16,7 +16,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.maxOffset = 0;
     this.initOffset = 15;
     this.offset = this.initOffset;
-    this.segmentsRecordSize = 200;
+    this.segmentsRecordSize = 500;
   }
 
   /*  preload() {
