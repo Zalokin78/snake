@@ -71,6 +71,20 @@ class Snake extends Phaser.GameObjects.GameObject {
     });
     this.offset = this.initOffset;
   }
+
+  checkCollision(x, y) {
+    //console.log(this.scene.topLayer);
+    if (this.snakeSize > 2) {
+      this.segments.children.entries.forEach((element) => {
+        if (element.x == x && element.y == y) {
+          this.collision = true;
+          //this.scene.gameOver();
+        }
+      });
+    }
+
+    return this.collision;
+  }
 }
 
 class PlayScene extends Phaser.Scene {
