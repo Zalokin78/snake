@@ -17,6 +17,9 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.initOffset = 15;
     this.offset = this.initOffset;
     this.segmentsRecordSize = 500;
+    this.movementSwitch = true;
+    //testing keyboard
+    this.keys = new Set();
   }
 
   /*  preload() {
@@ -52,14 +55,57 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.scene.input.keyboard.on("keydown-RIGHT", () => {
       this.head.setAngularVelocity(100);
     });
+
+    this.spacebar = this.scene.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.SPACE
+    );
   }
 
   update() {
+    /* this.scene.input.keyboard.JustDown("keydown", () => {
+      alert("keydown!");
+    }); */
+    if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
+      alert("key pressed!");
+    }
+
+    //test key event manager
+
+    this.scene.input.keyboard.on("keydown", (event) => {
+      if (!this.keys.has(event.code)) {
+        this.keys.add(event.code);
+        this.scene.input.keyboard.emit(`keypress_${event.code}`);
+        // or / and
+        this.scene.input.keyboard.emit(`keypress`, event.code);
+      }
+    });
+
+    this.scene.input.keyboard.on("keyup", (event) => {
+      this.keys.delete(event.code);
+      this.scene.input.keyboard.emit(`keyrelease_${event.code}`);
+      // or / and
+      this.scene.input.keyboard.emit(`keyrelease`, event.code);
+    });
+
+    /* if (this.movementSwitch) {
+      if (
+        (this.head.angle > 85 && this.head.angle < 95) ||
+        (this.head.angle > -85 && this.head.angle < -95) ||
+        (this.head.angle > -175 && this.head.angle < 5) ||
+        (this.head.angle > 175 && this.head.angle < 5)
+      ) {
+        //alert("90 degrees!!");
+        //this.head.setAngularVelocity(0);
+        this.movementSwitch = false;
+      }
+    } */
     this.scene.physics.velocityFromAngle(
       this.head.angle,
       100,
       this.head.body.velocity
     );
+
+    console.log(this.head.angle);
 
     this.segmentsRecord.unshift({ x: this.head.x, y: this.head.y });
     this.segmentsRecord.pop();
@@ -70,6 +116,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.offset += this.initOffset;
     });
     this.offset = this.initOffset;
+    this.movementSwitch = true;
   }
 
   checkCollision(x, y) {
