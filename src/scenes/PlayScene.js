@@ -19,7 +19,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.segmentsRecordSize = 500;
     this.movementSwitch = true;
     //testing keyboard
-    this.keys = new Set();
+    //this.keys = new Set();
   }
 
   /*  preload() {
@@ -48,12 +48,18 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.offset = this.initOffset;
     //console.log(this.segments);
     //debugger;
-
+    console.log(this.head.angle);
     this.scene.input.keyboard.on("keydown-LEFT", () => {
+      //if (this.head.angle > 0) console.log("LEFT!!");
+      //console.log(this.head.angle);
+
       this.head.setAngularVelocity(-100);
     });
     this.scene.input.keyboard.on("keydown-RIGHT", () => {
+      this.movementSwitch = true;
       this.head.setAngularVelocity(100);
+      this.movementSwitch = false;
+      console.log(this.movementSwitch);
     });
 
     this.spacebar = this.scene.input.keyboard.addKey(
@@ -62,6 +68,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   update() {
+    console.log(this.movementSwitch);
     /* this.scene.input.keyboard.JustDown("keydown", () => {
       alert("keydown!");
     }); */
@@ -69,15 +76,22 @@ class Snake extends Phaser.GameObjects.GameObject {
       alert("key pressed!");
     }
 
+    if (this.head.angle > 85 && this.head.angle < 95) {
+      if (!this.movementSwitch) this.head.setAngularVelocity(0);
+      console.log("oh no!");
+      //console.log("STRAIGHT UP!");
+    }
+
     //test key event manager
 
-    this.scene.input.keyboard.on("keydown", (event) => {
+    /* this.scene.input.keyboard.on("keydown", (event) => {
       if (!this.keys.has(event.code)) {
         this.keys.add(event.code);
         this.scene.input.keyboard.emit(`keypress_${event.code}`);
         // or / and
         this.scene.input.keyboard.emit(`keypress`, event.code);
       }
+      console.log(this.keys);
     });
 
     this.scene.input.keyboard.on("keyup", (event) => {
@@ -85,7 +99,8 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.scene.input.keyboard.emit(`keyrelease_${event.code}`);
       // or / and
       this.scene.input.keyboard.emit(`keyrelease`, event.code);
-    });
+      console.log(this.keys);
+    }); */
 
     /* if (this.movementSwitch) {
       if (
@@ -95,7 +110,7 @@ class Snake extends Phaser.GameObjects.GameObject {
         (this.head.angle > 175 && this.head.angle < 5)
       ) {
         //alert("90 degrees!!");
-        //this.head.setAngularVelocity(0);
+        this.head.setAngularVelocity(0);
         this.movementSwitch = false;
       }
     } */
@@ -116,7 +131,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.offset += this.initOffset;
     });
     this.offset = this.initOffset;
-    this.movementSwitch = true;
+    //this.movementSwitch = true;
   }
 
   checkCollision(x, y) {
