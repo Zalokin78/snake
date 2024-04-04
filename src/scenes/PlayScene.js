@@ -4,7 +4,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.snakeSize = 20;
+    this.snakeSize = 15;
     this.xPos = 200;
     this.yPos = 200;
     this.segments = this.scene.physics.add.group();
@@ -18,6 +18,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.offset = this.initOffset;
     this.segmentsRecordSize = 500;
     this.testCounter = 0;
+    this.collision = false;
   }
 
   /*  preload() {
@@ -27,14 +28,17 @@ class Snake extends Phaser.GameObjects.GameObject {
   } */
   create() {
     for (let i = 0; i < this.segmentsRecordSize; i++) {
-      this.segmentsRecord.push({ x: this.xPos + i, y: this.yPos });
+      this.segmentsRecord.push({
+        x: this.xPos + this.initOffset,
+        y: this.yPos,
+      });
     }
 
     this.head = this.scene.physics.add
       .sprite(this.xPos, this.yPos, "segment")
       .setVelocity(100, 0);
 
-    this.head.angle = 0;
+    this.head.angle = 180;
 
     for (let i = 0; i < this.snakeSize; i++) {
       this.segments
@@ -44,7 +48,34 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.offset += this.initOffset;
     }
     this.offset = this.initOffset;
+    this.createColliders();
 
+    this.keyboardMovement();
+
+    /* this.scene.input.keyboard.on("keydown-UP", () => {});
+
+    this.spacebar = this.scene.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.SPACE
+    ); */
+    console.log(this.scene.config.width);
+  }
+
+  update() {
+    // console.log(this.head.x);
+    // console.log(this.head.y);
+    // console.log(this.segments);
+    // console.log(this.head);
+    this.worldBoundaryBehaviour();
+    this.snakeMovement();
+    // this.segments.forEach((element) => {
+    this.collision = this.checkCollision(this.head.x, this.head.y);
+    console.log(this.collision);
+
+    if (this.collision) alert("COLLISION!!");
+    // });
+  }
+
+  keyboardMovement() {
     this.scene.input.keyboard.on("keydown-LEFT", () => {
       this.head.setAngularVelocity(-200);
     });
@@ -59,15 +90,8 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.scene.input.keyboard.on("keyup-RIGHT", () => {
       this.head.setAngularVelocity(0);
     });
-
-    this.scene.input.keyboard.on("keydown-UP", () => {});
-
-    this.spacebar = this.scene.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.SPACE
-    );
   }
-
-  update() {
+  snakeMovement() {
     this.scene.physics.velocityFromAngle(
       this.head.angle,
       100,
@@ -78,6 +102,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.segmentsRecord.pop();
 
     this.segments.children.entries.forEach((element) => {
+      //console.log(element.x);
       element.x = this.segmentsRecord[this.offset].x;
       element.y = this.segmentsRecord[this.offset].y;
       this.offset += this.initOffset;
@@ -86,16 +111,33 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   checkCollision(x, y) {
-    if (this.snakeSize > 2) {
-      this.segments.children.entries.forEach((element) => {
-        if (element.x == x && element.y == y) {
-          this.collision = true;
-          //this.scene.gameOver();
-        }
-      });
-    }
+    //if (this.snakeSize > 2) {
+    this.segments.children.entries.forEach((element) => {
+      console.log(x);
+      console.log(element.x);
+      if (element.x == x && element.y == y) {
+        this.collision = true;
+
+        //this.scene.gameOver();
+      }
+    });
+    //}
 
     return this.collision;
+  }
+
+  createColliders() {
+    this.scene.physics.add.collider(this.head, this.segments, () => {
+      alert("COLLSIONNNNN!!");
+    });
+  }
+
+  worldBoundaryBehaviour() {
+    this.head.x = this.head.x % this.scene.config.width;
+    this.head.y = this.head.y % this.scene.config.height;
+
+    if (this.head.x <= 0) this.head.x = this.scene.config.width;
+    if (this.head.y <= 0) this.head.y = this.scene.config.height;
   }
 }
 
