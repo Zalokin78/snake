@@ -4,7 +4,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.snakeSize = 15;
+    this.snakeSize = 2;
     this.xPos = 200;
     this.yPos = 200;
     this.segments = this.scene.physics.add.group();
@@ -14,11 +14,12 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.modulus = 0;
     this.indexOffset = 0;
     this.maxOffset = 0;
-    this.initOffset = 15;
+    this.initOffset = 15; //should be a static property (same in all instances)
     this.offset = this.initOffset;
     this.segmentsRecordSize = 500;
     this.testCounter = 0;
     this.collision = false;
+    this.lastOffset = null;
   }
 
   /*  preload() {
@@ -69,7 +70,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.snakeMovement();
     // this.segments.forEach((element) => {
     this.collision = this.checkCollision(this.head.x, this.head.y);
-    console.log(this.collision);
+    //console.log(this.collision);
 
     if (this.collision) alert("COLLISION!!");
     // });
@@ -107,14 +108,15 @@ class Snake extends Phaser.GameObjects.GameObject {
       element.y = this.segmentsRecord[this.offset].y;
       this.offset += this.initOffset;
     });
+    this.lastOffset = this.offset;
     this.offset = this.initOffset;
   }
 
   checkCollision(x, y) {
     //if (this.snakeSize > 2) {
     this.segments.children.entries.forEach((element) => {
-      console.log(x);
-      console.log(element.x);
+      //console.log(x);
+      //console.log(element.x);
       if (element.x == x && element.y == y) {
         this.collision = true;
 
@@ -152,12 +154,15 @@ class PlayScene extends Phaser.Scene {
     this.SKey = null;
     this.AKey = null;
     this.DKey = null;
+    this.apple = {};
   }
   preload() {
     this.load.image("segment", "assets/snake16Arrow.png");
+    this.load.image("apple", "assets/fujiApple.png");
   }
 
   create() {
+    console.log(Snake);
     this.WKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     this.SKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.AKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -167,9 +172,23 @@ class PlayScene extends Phaser.Scene {
 
     this.snakeA = new Snake(this);
     console.log(this.snakeA);
+    this.generateApple();
+    this.apple = this.physics.add
+      .staticSprite(this.apple.x, this.apple.y, "apple")
+      .setOrigin(0.5, 0.5);
+
     this.add.existing(this.snakeA);
 
     this.snakeA.create();
+
+    console.log(this.snakeA.head);
+    this.physics.add.collider(
+      this.snakeA.head,
+      this.apple,
+      this.eat,
+      null,
+      this
+    );
   }
 
   update(/* time, delta */) {
@@ -179,6 +198,33 @@ class PlayScene extends Phaser.Scene {
     this.snakeA.update();
     //console.log(this.game.loop.actualFps);
     //console.log(this.game.loop.time);
+  }
+
+  generateApple() {
+    let rndWidth = Math.floor(Phaser.Math.Between(0, this.config.width));
+    let rndHeight = Math.floor(Phaser.Math.Between(0, this.config.height));
+
+    this.apple.x = rndWidth;
+    this.apple.y = rndHeight;
+  }
+
+  eat() {
+    this.generateApple();
+    this.snakeA.segments
+      .create(
+        this.snakeA.segmentsRecord[
+          this.snakeA.lastOffset + this.snakeA.initOffset
+        ].x,
+        this.snakeA.segmentsRecord[
+          this.snakeA.lastOffset + this.snakeA.initOffset
+        ].y,
+        "segment"
+      )
+      .setOrigin(0.5);
+
+    console.log(this.snakeA.snakeSize);
+    this.snakeA.snakeSize++;
+    //this.hasAte = true;
   }
 }
 
