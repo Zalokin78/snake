@@ -4,7 +4,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.snakeSize = 2;
+    this.snakeSize = 3;
     this.xPos = 200;
     this.yPos = 200;
     this.segments = this.scene.physics.add.group();
@@ -174,7 +174,7 @@ class PlayScene extends Phaser.Scene {
     console.log(this.snakeA);
     this.generateApple();
     this.apple = this.physics.add
-      .staticSprite(this.apple.x, this.apple.y, "apple")
+      .sprite(this.apple.x, this.apple.y, "apple")
       .setOrigin(0.5, 0.5);
 
     this.add.existing(this.snakeA);
@@ -192,6 +192,8 @@ class PlayScene extends Phaser.Scene {
   }
 
   update(/* time, delta */) {
+    // this.apple.x;
+    // this.apple.y;
     // console.log("time " + time);
     // console.log("delta " + delta);
 
@@ -224,6 +226,7 @@ class PlayScene extends Phaser.Scene {
 
     console.log(this.snakeA.snakeSize);
     this.snakeA.snakeSize++;
+
     //this.hasAte = true;
   }
 }
