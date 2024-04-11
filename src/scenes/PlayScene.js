@@ -175,7 +175,8 @@ class PlayScene extends Phaser.Scene {
     this.generateApple();
     this.apple = this.physics.add
       .sprite(this.apple.x, this.apple.y, "apple")
-      .setOrigin(0.5, 0.5);
+      .setOrigin(0.5, 0.5)
+      .setPushable(false);
 
     this.add.existing(this.snakeA);
 
