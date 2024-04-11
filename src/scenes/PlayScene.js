@@ -4,7 +4,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.snakeSize = 3;
+    this.snakeSize = 8;
     this.xPos = 200;
     this.yPos = 200;
     this.segments = this.scene.physics.add.group();
@@ -14,7 +14,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.modulus = 0;
     this.indexOffset = 0;
     this.maxOffset = 0;
-    this.initOffset = 15; //should be a static property (same in all instances)
+    this.initOffset = 10; //should be a static property (same in all instances)
     this.offset = this.initOffset;
     this.segmentsRecordSize = 500;
     this.testCounter = 0;
@@ -32,6 +32,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.segmentsRecord.push({
         x: this.xPos + this.initOffset,
         y: this.yPos,
+        angle: 0,
       });
     }
 
@@ -99,13 +100,18 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.head.body.velocity
     );
 
-    this.segmentsRecord.unshift({ x: this.head.x, y: this.head.y });
+    this.segmentsRecord.unshift({
+      x: this.head.x,
+      y: this.head.y,
+      angle: this.head.angle,
+    });
     this.segmentsRecord.pop();
 
     this.segments.children.entries.forEach((element) => {
       //console.log(element.x);
       element.x = this.segmentsRecord[this.offset].x;
       element.y = this.segmentsRecord[this.offset].y;
+      element.angle = this.segmentsRecord[this.offset].angle;
       this.offset += this.initOffset;
     });
     this.lastOffset = this.offset;
@@ -130,7 +136,7 @@ class Snake extends Phaser.GameObjects.GameObject {
 
   createColliders() {
     this.scene.physics.add.collider(this.head, this.segments, () => {
-      alert("COLLSIONNNNN!!");
+      //alert("COLLSIONNNNN!!");
     });
   }
 
@@ -157,7 +163,7 @@ class PlayScene extends Phaser.Scene {
     this.apple = {};
   }
   preload() {
-    this.load.image("segment", "assets/snake16Arrow.png");
+    this.load.image("segment", "assets/ovalSegment.png");
     this.load.image("apple", "assets/fujiApple.png");
   }
 
