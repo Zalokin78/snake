@@ -28,6 +28,28 @@ class Snake extends Phaser.GameObjects.GameObject {
     blah
   } */
   create() {
+    /* this.testArray = ["a", "b", "c", "d"];
+    this.set = new Set(["a", "b", "c"]);
+
+    console.log(this.testArray);
+    // this.sliced = this.testArray.slice(1);
+    // console.log(this.sliced);
+
+    this.mysteryArray = this.segments.children;
+    this.mysteryArray[0].forEach((element) => {
+      console.log(element);
+    });
+
+    this.list = this.segments.children.entries;
+    let g = this.list.entries();
+    console.log(g);
+    for (x of g) {
+      console.log("a", x);
+    }
+
+    this.flatArray = this.segments.children.entries.flat();
+    console.log(this.flatArray); */
+
     for (let i = 0; i < this.segmentsRecordSize; i++) {
       this.segmentsRecord.push({
         x: this.xPos + this.initOffset,
@@ -49,6 +71,12 @@ class Snake extends Phaser.GameObjects.GameObject {
 
       this.offset += this.initOffset;
     }
+
+    this.segments.children.entries.forEach((element) => {
+      console.log(element);
+    });
+    console.log(this.segments.children.entries.slice(-1));
+
     this.offset = this.initOffset;
     this.createColliders();
 
@@ -135,9 +163,13 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   createColliders() {
-    this.scene.physics.add.collider(this.head, this.segments, () => {
-      //alert("COLLSIONNNNN!!");
-    });
+    this.scene.physics.add.collider(
+      this.head,
+      this.segments.children.entries.slice(-1),
+      () => {
+        //alert("COLLSIONNNNN!!");
+      }
+    );
   }
 
   worldBoundaryBehaviour() {
