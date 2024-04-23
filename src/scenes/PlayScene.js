@@ -4,11 +4,9 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.snakeSize = 3;
-    this.initXPos = 200;
-    this.initYPos = 200;
-    this.xPos = this.initXPos;
-    this.yPos = this.initYPos;
+    this.snakeSize = 8;
+    this.xPos = 200;
+    this.yPos = 200;
     this.segments = this.scene.physics.add.group();
     this.segmentsRecord = [];
     this.index = 0;
@@ -56,40 +54,28 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.segmentsRecord.push({
         x: this.xPos++,
         y: this.yPos,
-        angle: 180,
+        angle: 0,
       });
     }
-    debugger;
-    this.xPos = this.initXPos;
-    this.yPos = this.initYPos;
 
     this.head = this.scene.physics.add
       .sprite(this.xPos, this.yPos, "segment")
       .setVelocity(100, 0);
 
-    //this.head.angle = 180;
-    debugger;
+    this.head.angle = 180;
 
     for (let i = 0; i < this.snakeSize; i++) {
       this.segments
-        .create(
-          this.segmentsRecord[this.offset].x,
-          this.segmentsRecord[this.offset].y,
-          "segment"
-        )
+        .create(this.xPos + this.offset, this.yPos, "segment")
         .setOrigin(0.5);
 
       this.offset += this.initOffset;
     }
-    debugger;
 
     this.segments.children.entries.forEach((element) => {
       console.log(element);
-      element.angle = 180;
     });
-    console.log(this.segments.children.entries.slice(1));
-
-    //debugger;
+    console.log(this.segments.children.entries.slice(-1));
 
     this.offset = this.initOffset;
     this.createColliders();
@@ -136,7 +122,6 @@ class Snake extends Phaser.GameObjects.GameObject {
     });
   }
   snakeMovement() {
-    debugger;
     this.scene.physics.velocityFromAngle(
       this.head.angle,
       100,
@@ -180,10 +165,8 @@ class Snake extends Phaser.GameObjects.GameObject {
   createColliders() {
     this.scene.physics.add.collider(
       this.head,
-      this.segments.children.entries.slice(1),
+      this.segments.children.entries.slice(-1),
       () => {
-        console.log(this.segments.children.entries.slice(1));
-        //debugger;
         //alert("COLLSIONNNNN!!");
       }
     );
