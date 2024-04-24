@@ -13,13 +13,21 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.stutteredIndex = null;
     this.modulus = 0;
     this.indexOffset = 0;
+    this.segmentGap = 500;
     this.maxOffset = 0;
-    this.initOffset = 10; //should be a static property (same in all instances)
+    this.velocity = 130;
+    this.initOffset = Math.round((1 / this.velocity) * this.segmentGap);
     this.offset = this.initOffset;
     this.segmentsRecordSize = 500;
     this.testCounter = 0;
     this.collision = false;
     this.lastOffset = null;
+    //segments pos test variables
+    this.segmentsTest = this.scene.physics.add.group();
+    this.posArr = [];
+    this.xPosTest = 100;
+    this.yPosTest = 100;
+    this.offsetTest = 10;
   }
 
   /*  preload() {
@@ -52,26 +60,48 @@ class Snake extends Phaser.GameObjects.GameObject {
 
     for (let i = 0; i < this.segmentsRecordSize; i++) {
       this.segmentsRecord.push({
-        x: this.xPos++,
+        x: this.xPos,
         y: this.yPos,
-        angle: 0,
+        angle: 180,
       });
     }
 
-    this.head = this.scene.physics.add
-      .sprite(this.xPos, this.yPos, "segment")
-      .setVelocity(100, 0);
+    this.head = this.scene.physics.add.sprite(this.xPos, this.yPos, "segment");
+    /* .setVelocity(1000, 1000); */
 
     this.head.angle = 180;
 
     for (let i = 0; i < this.snakeSize; i++) {
       this.segments
-        .create(this.xPos + this.offset, this.yPos, "segment")
+        .create(this.xPos /*  + this.offset */, this.yPos, "segment")
         .setOrigin(0.5);
 
       this.offset += this.initOffset;
     }
 
+    //////////////////////////////
+    //testing area
+    for (let i = 0; i < 300; i++) {
+      this.xPosTest += Math.cos(0.785);
+      this.yPosTest += Math.sin(0.785);
+      debugger;
+      this.posArr.push({ x: this.xPosTest, y: this.yPosTest });
+    }
+    debugger;
+
+    for (let i = 0; i < this.snakeSize; i++) {
+      this.segmentsTest
+        .create(
+          this.posArr[this.offsetTest].x,
+          this.posArr[this.offsetTest].y,
+          "segment"
+        )
+        .setOrigin(0.5);
+
+      this.offsetTest += 10;
+    }
+
+    ////////////////////////////////////////
     this.segments.children.entries.forEach((element) => {
       console.log(element);
     });
@@ -101,7 +131,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.collision = this.checkCollision(this.head.x, this.head.y);
     //console.log(this.collision);
 
-    if (this.collision) alert("COLLISION!!");
+    //if (this.collision) alert("COLLISION!!");
     // });
   }
 
@@ -124,7 +154,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   snakeMovement() {
     this.scene.physics.velocityFromAngle(
       this.head.angle,
-      100,
+      this.velocity,
       this.head.body.velocity
     );
 
