@@ -62,14 +62,14 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.segmentsRecord.push({
         x: this.xPos,
         y: this.yPos,
-        angle: 180,
+        angle: 290,
       });
     }
 
     this.head = this.scene.physics.add.sprite(this.xPos, this.yPos, "segment");
     /* .setVelocity(1000, 1000); */
 
-    this.head.angle = 180;
+    this.head.angle = 290;
 
     for (let i = 0; i < this.snakeSize; i++) {
       this.segments
@@ -82,8 +82,8 @@ class Snake extends Phaser.GameObjects.GameObject {
     //////////////////////////////
     //testing area
     for (let i = 0; i < 300; i++) {
-      this.xPosTest += Math.cos(0.785);
-      this.yPosTest += Math.sin(0.785);
+      this.xPosTest -= Math.cos(Math.PI * (this.head.angle / 180));
+      this.yPosTest -= Math.sin(Math.PI * (this.head.angle / 180));
       debugger;
       this.posArr.push({ x: this.xPosTest, y: this.yPosTest });
     }
@@ -100,6 +100,10 @@ class Snake extends Phaser.GameObjects.GameObject {
 
       this.offsetTest += 10;
     }
+
+    this.segmentsTest.children.entries.forEach((element) => {
+      element.angle = this.head.angle;
+    });
 
     ////////////////////////////////////////
     this.segments.children.entries.forEach((element) => {
