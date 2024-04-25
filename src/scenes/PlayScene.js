@@ -71,26 +71,25 @@ class Snake extends Phaser.GameObjects.GameObject {
 
     this.head.angle = 290;
 
-    for (let i = 0; i < this.snakeSize; i++) {
+    /* for (let i = 0; i < this.snakeSize; i++) {
       this.segments
-        .create(this.xPos /*  + this.offset */, this.yPos, "segment")
+        .create(this.xPos, this.yPos, "segment")
         .setOrigin(0.5);
 
       this.offset += this.initOffset;
-    }
+    } */
 
     //////////////////////////////
     //testing area
     for (let i = 0; i < 300; i++) {
-      this.xPosTest -= Math.cos(Math.PI * (this.head.angle / 180));
-      this.yPosTest -= Math.sin(Math.PI * (this.head.angle / 180));
-      debugger;
-      this.posArr.push({ x: this.xPosTest, y: this.yPosTest });
+      this.xPos += Math.cos(Math.PI * (this.head.angle / 180));
+      this.yPos += Math.sin(Math.PI * (this.head.angle / 180));
+
+      this.posArr.push({ x: this.xPos, y: this.yPos });
     }
-    debugger;
 
     for (let i = 0; i < this.snakeSize; i++) {
-      this.segmentsTest
+      this.segments
         .create(
           this.posArr[this.offsetTest].x,
           this.posArr[this.offsetTest].y,
@@ -101,9 +100,10 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.offsetTest += 10;
     }
 
-    this.segmentsTest.children.entries.forEach((element) => {
+    this.segments.children.entries.forEach((element) => {
       element.angle = this.head.angle;
     });
+    debugger;
 
     ////////////////////////////////////////
     this.segments.children.entries.forEach((element) => {
