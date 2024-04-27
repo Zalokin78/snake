@@ -283,7 +283,8 @@ class PlayScene extends Phaser.Scene {
 
   eat() {
     this.generateApple();
-    this.snakeA.segments
+    this.snakeA.segments;
+    git
       .create(
         this.snakeA.segmentsRecord[
           this.snakeA.lastOffset + this.snakeA.initOffset
