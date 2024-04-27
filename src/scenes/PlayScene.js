@@ -68,6 +68,8 @@ class Snake extends Phaser.GameObjects.GameObject {
 
     this.head = this.scene.physics.add.sprite(this.xPos, this.yPos, "segment");
 
+    this.head.angle = 280;
+
     for (let i = 0; i < this.segmentsRecordSize; i++) {
       this.xPos -= Math.cos(Math.PI * (this.head.angle / 180));
       this.yPos -= Math.sin(Math.PI * (this.head.angle / 180));
@@ -76,8 +78,6 @@ class Snake extends Phaser.GameObjects.GameObject {
     }
 
     /* .setVelocity(1000, 1000); */
-
-    this.head.angle = 365;
 
     /* for (let i = 0; i < this.snakeSize; i++) {
       this.segments.create(this.xPos, this.yPos, "segment").setOrigin(0.5);
@@ -145,6 +145,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   update() {
+    debugger;
     // console.log(this.head.x);
     // console.log(this.head.y);
     // console.log(this.segments);
@@ -198,6 +199,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     });
     this.lastOffset = this.offset;
     this.offset = this.initOffset;
+    debugger;
   }
 
   checkCollision(x, y) {
@@ -293,6 +295,7 @@ class PlayScene extends Phaser.Scene {
     this.snakeA.update();
     //console.log(this.game.loop.actualFps);
     //console.log(this.game.loop.time);
+    debugger;
   }
 
   generateApple() {
@@ -305,8 +308,7 @@ class PlayScene extends Phaser.Scene {
 
   eat() {
     this.generateApple();
-    this.snakeA.segments;
-    git
+    this.snakeA.segments
       .create(
         this.snakeA.segmentsRecord[
           this.snakeA.lastOffset + this.snakeA.initOffset

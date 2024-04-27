@@ -1,0 +1,69 @@
+node_modules
+build/app.js
+build/index.html
+build/vendor.js
+build/vendor.js.LICENSE.txt
+build/assets/apple.png
+build/assets/fujiApple.aseprite
+build/assets/fujiApple.png
+build/assets/fujiAppleBig.aseprite
+build/assets/fujiAppleBig.png
+build/assets/snake-graphics.png
+build/assets/snake.png
+build/assets/snake16.png
+build/assets/snake16Arrow.png
+build/assets/snake32.png
+build/assets/snakeBody.aseprite
+build/assets/snakeRound.aseprite
+build/assets/snakeRound.png
+build/assets/snakeThinBorder.aseprite
+build/assets/snakeThinBorder.png
+build/assets/New folder/00.png
+build/assets/New folder/01.png
+build/assets/New folder/02.png
+build/assets/New folder/03.png
+build/assets/New folder/04.png
+build/assets/New folder/05.png
+build/assets/New folder/06.png
+build/assets/New folder/07.png
+build/assets/New folder/08.png
+build/assets/New folder/09.png
+build/assets/New folder/10.png
+build/assets/New folder/11.png
+build/assets/New folder/12.png
+build/assets/New folder/13.png
+build/assets/New folder/14.png
+build/assets/New folder/15.png
+build/assets/New folder/16.png
+build/assets/New folder/17.png
+build/assets/New folder/18.png
+build/assets/New folder/19.png
+build/assets/snakeBodyTemplate/00.png
+build/assets/snakeBodyTemplate/01.png
+build/assets/snakeBodyTemplate/02.png
+build/assets/snakeBodyTemplate/03.png
+build/assets/snakeBodyTemplate/04.png
+build/assets/snakeBodyTemplate/05.png
+build/assets/snakeBodyTemplate/06.png
+build/assets/snakeBodyTemplate/07.png
+build/assets/snakeBodyTemplate/08.png
+build/assets/snakeBodyTemplate/09.png
+build/assets/snakeBodyTemplate/10.png
+build/assets/snakeBodyTemplate/11.png
+build/assets/snakeBodyTemplate/12.png
+build/assets/snakeBodyTemplate/13.png
+build/assets/snakeBodyTemplate/14.png
+build/assets/snakeBodyTemplate/15.png
+build/assets/snakeBodyTemplate/16.png
+build/assets/snakeBodyTemplate/17.png
+build/assets/snakeBodyTemplate/18.png
+build/assets/snakeBodyTemplate/19.png
+build/assets/Tiled/snake.tiled-project
+build/assets/Tiled/snake.tiled-session
+build/assets/Tiled/terrain_atlas.png
+build/assets/Tiled/terrain.json
+build/assets/Tiled/terrain.tmj
+build/assets/Tiled/terrain.tmx
+build/assets/Tiled/terrain3Layers.json
+build/assets/Tiled/terrain3Layers.tmx
+build/assets/Tiled/terrain3LayersOld.json
