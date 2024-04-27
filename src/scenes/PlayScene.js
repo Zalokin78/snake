@@ -71,25 +71,23 @@ class Snake extends Phaser.GameObjects.GameObject {
 
     this.head.angle = 290;
 
-    /* for (let i = 0; i < this.snakeSize; i++) {
-      this.segments
-        .create(this.xPos, this.yPos, "segment")
-        .setOrigin(0.5);
+    for (let i = 0; i < this.snakeSize; i++) {
+      this.segments.create(this.xPos, this.yPos, "segment").setOrigin(0.5);
 
       this.offset += this.initOffset;
-    } */
+    }
 
     //////////////////////////////
     //testing area
     for (let i = 0; i < 300; i++) {
-      this.xPos += Math.cos(Math.PI * (this.head.angle / 180));
-      this.yPos += Math.sin(Math.PI * (this.head.angle / 180));
+      this.xPosTest += Math.cos(Math.PI * (this.head.angle / 180));
+      this.yPosTest += Math.sin(Math.PI * (this.head.angle / 180));
 
-      this.posArr.push({ x: this.xPos, y: this.yPos });
+      this.posArr.push({ x: this.xPosTest, y: this.yPosTest });
     }
 
     for (let i = 0; i < this.snakeSize; i++) {
-      this.segments
+      this.segmentsTest
         .create(
           this.posArr[this.offsetTest].x,
           this.posArr[this.offsetTest].y,
