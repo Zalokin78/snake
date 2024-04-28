@@ -4,7 +4,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.snakeSize = 8;
+    this.snakeSize = 10;
     this.xPos = 200;
     this.yPos = 200;
     this.segments = this.scene.physics.add.group();
@@ -13,7 +13,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.stutteredIndex = null;
     this.modulus = 0;
     this.indexOffset = 0;
-    this.segmentGap = 500;
+    this.segmentGap = 700;
     this.maxOffset = 0;
     this.velocity = 130;
     this.initOffset = Math.round((1 / this.velocity) * this.segmentGap);
@@ -74,7 +74,11 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.xPos -= Math.cos(Math.PI * (this.head.angle / 180));
       this.yPos -= Math.sin(Math.PI * (this.head.angle / 180));
 
-      this.segmentsRecord.push({ x: this.xPos, y: this.yPos });
+      this.segmentsRecord.push({
+        x: this.xPos,
+        y: this.yPos,
+        angle: this.head.angle,
+      });
     }
 
     /* .setVelocity(1000, 1000); */
@@ -119,7 +123,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     } */
 
     this.segments.children.entries.forEach((element) => {
-      element.angle = this.head.angle;
+      element.body.angle = this.head.angle;
     });
 
     ////////////////////////////////////////
