@@ -13,21 +13,24 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.stutteredIndex = null;
     this.modulus = 0;
     this.indexOffset = 0;
-    this.segmentGap = 700;
+    this.segmentGap = 1000;
     this.maxOffset = 0;
-    this.velocity = 130;
+    this.velocity = 100; //130
     this.initOffset = Math.round((1 / this.velocity) * this.segmentGap);
     this.offset = this.initOffset;
     this.segmentsRecordSize = 500;
     this.testCounter = 0;
     this.collision = false;
     this.lastOffset = null;
+    this.angularVelocity = 300;
+    this.velMultiplyer = 2;
     //segments pos test variables
     this.segmentsTest = this.scene.physics.add.group();
     this.posArr = [];
     this.xPosTest = 100;
     this.yPosTest = 100;
     this.offsetTest = 10;
+    this.initPos = [];
   }
 
   /*  preload() {
@@ -68,11 +71,13 @@ class Snake extends Phaser.GameObjects.GameObject {
 
     this.head = this.scene.physics.add.sprite(this.xPos, this.yPos, "segment");
 
-    this.head.angle = 280;
+    this.head.angle = 220;
 
     for (let i = 0; i < this.segmentsRecordSize; i++) {
-      this.xPos -= Math.cos(Math.PI * (this.head.angle / 180));
-      this.yPos -= Math.sin(Math.PI * (this.head.angle / 180));
+      this.xPos -=
+        Math.cos(Math.PI * (this.head.angle / 180)) * this.velMultiplyer; //* 2.635;
+      this.yPos -=
+        Math.sin(Math.PI * (this.head.angle / 180)) * this.velMultiplyer; //* 2.635;
 
       this.segmentsRecord.push({
         x: this.xPos,
@@ -99,6 +104,11 @@ class Snake extends Phaser.GameObjects.GameObject {
         .setOrigin(0.5);
 
       this.offset += this.initOffset;
+      //for testing purposes
+      this.initPos.push({
+        x: this.segments.children.entries[i].x,
+        y: this.segments.children.entries[i].y,
+      });
     }
 
     //////////////////////////////
@@ -166,14 +176,14 @@ class Snake extends Phaser.GameObjects.GameObject {
 
   keyboardMovement() {
     this.scene.input.keyboard.on("keydown-LEFT", () => {
-      this.head.setAngularVelocity(-200);
+      this.head.setAngularVelocity(-this.angularVelocity);
     });
     this.scene.input.keyboard.on("keyup-LEFT", () => {
       this.head.setAngularVelocity(0);
       //this.head.angle -= 5;
     });
     this.scene.input.keyboard.on("keydown-RIGHT", () => {
-      this.head.setAngularVelocity(200);
+      this.head.setAngularVelocity(this.angularVelocity);
     });
 
     this.scene.input.keyboard.on("keyup-RIGHT", () => {
@@ -181,11 +191,15 @@ class Snake extends Phaser.GameObjects.GameObject {
     });
   }
   snakeMovement() {
-    this.scene.physics.velocityFromAngle(
+    /* this.scene.physics.velocityFromAngle(
       this.head.angle,
       this.velocity,
       this.head.body.velocity
-    );
+    ); */
+    this.head.x +=
+      Math.cos(Math.PI * (this.head.angle / 180)) * this.velMultiplyer; //* 2.635;
+    this.head.y +=
+      Math.sin(Math.PI * (this.head.angle / 180)) * this.velMultiplyer; //* 2.635;
 
     this.segmentsRecord.unshift({
       x: this.head.x,
@@ -299,7 +313,6 @@ class PlayScene extends Phaser.Scene {
     this.snakeA.update();
     //console.log(this.game.loop.actualFps);
     //console.log(this.game.loop.time);
-    debugger;
   }
 
   generateApple() {
