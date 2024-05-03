@@ -39,36 +39,6 @@ class Snake extends Phaser.GameObjects.GameObject {
     blah
   } */
   create() {
-    /* this.testArray = ["a", "b", "c", "d"];
-    this.set = new Set(["a", "b", "c"]);
-
-    console.log(this.testArray);
-    // this.sliced = this.testArray.slice(1);
-    // console.log(this.sliced);
-
-    this.mysteryArray = this.segments.children;
-    this.mysteryArray[0].forEach((element) => {
-      console.log(element);
-    });
-
-    this.list = this.segments.children.entries;
-    let g = this.list.entries();
-    console.log(g);
-    for (x of g) {
-      console.log("a", x);
-    }
-
-    this.flatArray = this.segments.children.entries.flat();
-    console.log(this.flatArray); */
-
-    /* for (let i = 0; i < this.segmentsRecordSize; i++) {
-      this.segmentsRecord.push({
-        x: this.xPos,
-        y: this.yPos,
-        angle: 290,
-      });
-    } */
-
     this.head = this.scene.physics.add.sprite(this.xPos, this.yPos, "segment");
 
     this.head.angle = 220;
@@ -85,14 +55,6 @@ class Snake extends Phaser.GameObjects.GameObject {
         angle: this.head.angle,
       });
     }
-
-    /* .setVelocity(1000, 1000); */
-
-    /* for (let i = 0; i < this.snakeSize; i++) {
-      this.segments.create(this.xPos, this.yPos, "segment").setOrigin(0.5);
-
-      this.offset += this.initOffset;
-    } */
 
     for (let i = 0; i < this.snakeSize; i++) {
       this.segments
@@ -111,36 +73,10 @@ class Snake extends Phaser.GameObjects.GameObject {
       });
     }
 
-    //////////////////////////////
-    //testing area
-    /* for (let i = 0; i < 300; i++) {
-      this.xPosTest -= Math.cos(Math.PI * (this.head.angle / 180));
-      this.yPosTest -= Math.sin(Math.PI * (this.head.angle / 180));
-
-      this.posArr.push({ x: this.xPosTest, y: this.yPosTest });
-    } */
-
-    /*  for (let i = 0; i < this.snakeSize; i++) {
-      this.segmentsTest
-        .create(
-          this.posArr[this.offsetTest].x,
-          this.posArr[this.offsetTest].y,
-          "segment"
-        )
-        .setOrigin(0.5);
-
-      this.offsetTest += 10;
-    } */
-
     this.segments.children.entries.forEach((element) => {
       element.body.angle = this.head.angle;
     });
 
-    ////////////////////////////////////////
-    /* this.segmentsTest.children.entries.forEach((element) => {
-      element.angle = this.head.angle;
-      console.log(element);
-    }); */
     console.log(this.segments.children.entries.slice(-1));
 
     this.offset = this.initOffset;
@@ -160,18 +96,11 @@ class Snake extends Phaser.GameObjects.GameObject {
 
   update() {
     debugger;
-    // console.log(this.head.x);
-    // console.log(this.head.y);
-    // console.log(this.segments);
-    // console.log(this.head);
+
     this.worldBoundaryBehaviour();
     this.snakeMovement();
-    // this.segments.forEach((element) => {
-    this.collision = this.checkCollision(this.head.x, this.head.y);
-    //console.log(this.collision);
 
-    //if (this.collision) alert("COLLISION!!");
-    // });
+    this.collision = this.checkCollision(this.head.x, this.head.y);
   }
 
   keyboardMovement() {
@@ -191,11 +120,6 @@ class Snake extends Phaser.GameObjects.GameObject {
     });
   }
   snakeMovement() {
-    /* this.scene.physics.velocityFromAngle(
-      this.head.angle,
-      this.velocity,
-      this.head.body.velocity
-    ); */
     this.head.x +=
       Math.cos(Math.PI * (this.head.angle / 180)) * this.velMultiplyer; //* 2.635;
     this.head.y +=
@@ -221,17 +145,13 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   checkCollision(x, y) {
-    //if (this.snakeSize > 2) {
     this.segments.children.entries.forEach((element) => {
-      //console.log(x);
-      //console.log(element.x);
       if (element.x == x && element.y == y) {
         this.collision = true;
 
         //this.scene.gameOver();
       }
     });
-    //}
 
     return this.collision;
   }
@@ -305,8 +225,6 @@ class PlayScene extends Phaser.Scene {
   }
 
   update(/* time, delta */) {
-    // this.apple.x;
-    // this.apple.y;
     // console.log("time " + time);
     // console.log("delta " + delta);
 
