@@ -249,7 +249,7 @@ class PlayScene extends Phaser.Scene {
   }
 
   update(/* time, delta */) {
-    //testSprite movement
+    //testSprite movement testing area
     this.testSprite.setVelocityX(0);
     this.testSprite.setVelocityY(0);
 
