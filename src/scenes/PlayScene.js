@@ -159,9 +159,9 @@ class Snake extends Phaser.GameObjects.GameObject {
   createColliders() {
     this.scene.physics.add.collider(
       this.head,
-      this.segments.children.entries.slice(-1),
+      this.segments.children.entries.slice(1),
       () => {
-        //alert("COLLSIONNNNN!!");
+        alert("COLLSIONNNNN!!");
       }
     );
   }
