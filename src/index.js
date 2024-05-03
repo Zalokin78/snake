@@ -5,8 +5,8 @@ import PlayScene from "./scenes/PlayScene";
 
 const SCREEN_SIZE = 40;
 const SEGMENT_SIZE = 16;
-const WIDTH = 800;
-const HEIGHT = 600;
+const WIDTH = 640;
+const HEIGHT = 640;
 const SNAKE_POSITION = {
   x: Math.floor(Phaser.Math.Between(0, WIDTH)),
   y: Math.floor(Phaser.Math.Between(0, HEIGHT)),
