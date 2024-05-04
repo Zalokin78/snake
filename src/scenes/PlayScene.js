@@ -122,10 +122,16 @@ class Snake extends Phaser.GameObjects.GameObject {
     });
   }
   snakeMovement() {
-    this.head.x +=
+    this.scene.physics.velocityFromAngle(
+      this.head.angle,
+      this.velocity,
+      this.head.body.velocity
+    );
+
+    /* this.head.x +=
       Math.cos(Math.PI * (this.head.angle / 180)) * this.velMultiplyer; //* 2.635;
     this.head.y +=
-      Math.sin(Math.PI * (this.head.angle / 180)) * this.velMultiplyer; //* 2.635;
+      Math.sin(Math.PI * (this.head.angle / 180)) * this.velMultiplyer; //* 2.635; */
 
     this.segmentsRecord.unshift({
       x: this.head.x,
@@ -167,13 +173,13 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.scene.testFunc2
     );
 
-    /* this.scene.physics.add.collider(
+    this.scene.physics.add.collider(
       this.head,
       this.scene.topLayer,
       this.scene.testFunc2,
       null,
       this
-    ); */
+    );
   }
 
   worldBoundaryBehaviour() {
