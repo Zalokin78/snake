@@ -109,7 +109,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     });
     this.scene.input.keyboard.on("keyup-LEFT", () => {
       this.head.setAngularVelocity(0);
-      //this.head.angle -= 5;
+      //this.head.angle -= 5;git branch
     });
     this.scene.input.keyboard.on("keydown-RIGHT", () => {
       this.head.setAngularVelocity(this.angularVelocity);
