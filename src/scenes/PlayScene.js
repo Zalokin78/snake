@@ -5,8 +5,8 @@ class Snake extends Phaser.GameObjects.GameObject {
     super(scene);
     this.segments = null;
     this.snakeSize = 10;
-    this.xPos = 200;
-    this.yPos = 200;
+    this.xPos = 100;
+    this.yPos = 100;
     this.segments = this.scene.physics.add.group();
     this.segmentsRecord = [];
     this.index = 0;
@@ -39,9 +39,11 @@ class Snake extends Phaser.GameObjects.GameObject {
     blah
   } */
   create() {
+    console.log(this.scene.topLayer);
     this.head = this.scene.physics.add.sprite(this.xPos, this.yPos, "segment");
 
     this.head.angle = 220;
+    this.head.setTint(1);
 
     for (let i = 0; i < this.segmentsRecordSize; i++) {
       this.xPos -=
@@ -157,13 +159,21 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   createColliders() {
+    console.log(this.head);
     this.scene.physics.add.collider(
       this.head,
       this.segments.children.entries.slice(1),
-      () => {
-        alert("COLLSIONNNNN!!");
-      }
+
+      this.scene.testFunc2
     );
+
+    /* this.scene.physics.add.collider(
+      this.head,
+      this.scene.topLayer,
+      this.scene.testFunc2,
+      null,
+      this
+    ); */
   }
 
   worldBoundaryBehaviour() {
@@ -189,12 +199,17 @@ class PlayScene extends Phaser.Scene {
     this.apple = {};
   }
   preload() {
+    this.load.image("terrain", "assets/Tiled/terrain_atlas.png");
     this.load.image("segment", "assets/ovalSegment.png");
     this.load.image("apple", "assets/fujiApple.png");
+
+    this.load.tilemapTiledJSON("mappy", "assets/Tiled/terrain3Layers.json");
   }
 
   create() {
     console.log(Snake);
+    this.tileSet();
+
     this.WKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     this.SKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.AKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -222,9 +237,34 @@ class PlayScene extends Phaser.Scene {
       null,
       this
     );
+    this.testSprite = this.physics.add.sprite(200, 200, "segment");
+    console.log(this.topLayer);
+    this.physics.add.collider(
+      this.testSprite,
+      this.topLayer,
+      this.testFunc2,
+      null,
+      this
+    );
   }
 
   update(/* time, delta */) {
+    //testSprite movement testing area
+    this.testSprite.setVelocityX(0);
+    this.testSprite.setVelocityY(0);
+
+    if (this.WKey.isDown == true) {
+      this.testSprite.setVelocityY(-100);
+    }
+    if (this.SKey.isDown == true) {
+      this.testSprite.setVelocityY(100);
+    }
+    if (this.AKey.isDown == true) {
+      this.testSprite.setVelocityX(-100);
+    }
+    if (this.DKey.isDown == true) {
+      this.testSprite.setVelocityX(100);
+    }
     // console.log("time " + time);
     // console.log("delta " + delta);
 
@@ -259,6 +299,25 @@ class PlayScene extends Phaser.Scene {
     this.snakeA.snakeSize++;
 
     //this.hasAte = true;
+  }
+  tileSet() {
+    let mappy = this.add.tilemap("mappy");
+
+    let terrain = mappy.addTilesetImage("terrain_atlas", "terrain");
+    //this.segments = this.physics.add.group();
+
+    let botLayer = mappy.createLayer("bot", terrain, 0, 0);
+    let grassLayer = mappy.createLayer("grass", terrain, 0, 0);
+    this.topLayer = mappy.createLayer("top", terrain, 0, 0);
+
+    //this.physics.add.collider(this.snakeA, this.topLayer);
+
+    this.topLayer.setCollisionByProperty({ collides: true });
+  }
+
+  testFunc2() {
+    console.log("RESTART II!!!!!");
+    alert("Tile collision!!");
   }
 }
 
