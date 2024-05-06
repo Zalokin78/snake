@@ -40,6 +40,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   } */
   create() {
     console.log(this.scene.topLayer);
+
     this.head = this.scene.physics.add.sprite(this.xPos, this.yPos, "segment");
 
     this.head.angle = 220;
@@ -209,7 +210,7 @@ class PlayScene extends Phaser.Scene {
     this.load.image("segment", "assets/ovalSegment.png");
     this.load.image("apple", "assets/fujiApple.png");
 
-    this.load.tilemapTiledJSON("mappy", "assets/Tiled/terrain3Layers.json");
+    this.load.tilemapTiledJSON("mappy", "assets/Tiled/snakeTilesTest.json");
   }
 
   create() {
@@ -243,7 +244,7 @@ class PlayScene extends Phaser.Scene {
       null,
       this
     );
-    this.testSprite = this.physics.add.sprite(200, 200, "segment");
+    /* this.testSprite = this.physics.add.sprite(200, 200, "segment");
     console.log(this.topLayer);
     this.physics.add.collider(
       this.testSprite,
@@ -251,12 +252,17 @@ class PlayScene extends Phaser.Scene {
       this.testFunc2,
       null,
       this
-    );
+    ); */
+    console.log(this.topLayer.tilemap.tileToWorldXY(2, 1));
+    this.topLayer.tilemap.forEachTile((element) => {
+      if (element.index > -1)
+        console.log(this.topLayer.tilemap.tileToWorldXY(element.x, element.y));
+    });
   }
 
   update(/* time, delta */) {
     //testSprite movement testing area
-    this.testSprite.setVelocityX(0);
+    /* this.testSprite.setVelocityX(0);
     this.testSprite.setVelocityY(0);
 
     if (this.WKey.isDown == true) {
@@ -270,7 +276,7 @@ class PlayScene extends Phaser.Scene {
     }
     if (this.DKey.isDown == true) {
       this.testSprite.setVelocityX(100);
-    }
+    } */
     // console.log("time " + time);
     // console.log("delta " + delta);
 
@@ -314,7 +320,7 @@ class PlayScene extends Phaser.Scene {
 
     let botLayer = mappy.createLayer("bot", terrain, 0, 0);
     let grassLayer = mappy.createLayer("grass", terrain, 0, 0);
-    this.topLayer = mappy.createLayer("top", terrain, 0, 0);
+    this.topLayer = mappy.createLayer("wall", terrain, 0, 0);
 
     //this.physics.add.collider(this.snakeA, this.topLayer);
 
