@@ -4,33 +4,33 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.snakeSize = 10;
-    this.xPos = 100;
-    this.yPos = 100;
+    this.snakeSize = 3;
+    //this.xPos = 100;
+    //this.yPos = 100;
     this.segments = this.scene.physics.add.group();
     this.segmentsRecord = [];
     this.index = 0;
-    this.stutteredIndex = null;
+    //this.stutteredIndex = null;
     this.modulus = 0;
     this.indexOffset = 0;
-    this.segmentGap = 1000;
+    this.segmentGap = 1100;
     this.maxOffset = 0;
-    this.velocity = 100; //130
+    this.velocity = 200; //130
     this.initOffset = Math.round((1 / this.velocity) * this.segmentGap);
     this.offset = this.initOffset;
     this.segmentsRecordSize = 500;
-    this.testCounter = 0;
+    //this.testCounter = 0;
     this.collision = false;
     this.lastOffset = null;
     this.angularVelocity = 300;
-    this.velMultiplyer = 2;
+    this.velMultiplyer = 3;
     //segments pos test variables
-    this.segmentsTest = this.scene.physics.add.group();
+    /* this.segmentsTest = this.scene.physics.add.group();
     this.posArr = [];
     this.xPosTest = 100;
     this.yPosTest = 100;
     this.offsetTest = 10;
-    this.initPos = [];
+    this.initPos = []; */
   }
 
   /*  preload() {
@@ -39,11 +39,90 @@ class Snake extends Phaser.GameObjects.GameObject {
     blah
   } */
   create() {
-    console.log(this.scene.topLayer);
+    console.log(this.player);
+    //console.log(this.scene.topLayer);
+    this.createSnake();
+    this.createColliders();
+    this.keyboardMovement(2);
 
+    /* this.scene.input.keyboard.on("keydown-UP", () => {});
+
+    this.spacebar = this.scene.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.SPACE
+    ); */
+    //console.log(this.scene.config.width);
+    debugger;
+  }
+
+  update() {
+    debugger;
+
+    this.worldBoundaryBehaviour();
+    this.snakeMovement();
+
+    this.collision = this.checkCollision(this.head.x, this.head.y);
+  }
+
+  keyboardMovement(player) {
+    if (this.player == 1) {
+      this.scene.input.keyboard.on("keydown-LEFT", () => {
+        this.head.setAngularVelocity(-this.angularVelocity);
+      });
+      this.scene.input.keyboard.on("keyup-LEFT", () => {
+        this.head.setAngularVelocity(0);
+        //this.head.angle -= 5;git branch
+      });
+      this.scene.input.keyboard.on("keydown-RIGHT", () => {
+        this.head.setAngularVelocity(this.angularVelocity);
+      });
+
+      this.scene.input.keyboard.on("keyup-RIGHT", () => {
+        this.head.setAngularVelocity(0);
+      });
+    }
+
+    /* if (this.AKey.isDown == true) {
+        this.head.setAngularVelocity(-this.angularVelocity);
+      }
+      if (this.DKey.isDown == true) {
+        this.head.setAngularVelocity(this.angularVelocity);
+      } */
+    if (this.player == 2) {
+      this.scene.input.keyboard.on("keydown-A", () => {
+        this.head.setAngularVelocity(-this.angularVelocity);
+      });
+      this.scene.input.keyboard.on("keyup-A", () => {
+        this.head.setAngularVelocity(0);
+        //this.head.angle -= 5;git branch
+      });
+      this.scene.input.keyboard.on("keydown-D", () => {
+        this.head.setAngularVelocity(this.angularVelocity);
+      });
+
+      this.scene.input.keyboard.on("keyup-D", () => {
+        this.head.setAngularVelocity(0);
+      });
+    }
+    /* this.scene.input.keyboard.on("keydown-LEFT", () => {
+        this.head.setAngularVelocity(-this.angularVelocity);
+      });
+      this.scene.input.keyboard.on("keyup-LEFT", () => {
+        this.head.setAngularVelocity(0);
+        //this.head.angle -= 5;git branch
+      });
+      this.scene.input.keyboard.on("keydown-RIGHT", () => {
+        this.head.setAngularVelocity(this.angularVelocity);
+      });
+
+      this.scene.input.keyboard.on("keyup-RIGHT", () => {
+        this.head.setAngularVelocity(0);
+      }); */
+  }
+
+  createSnake() {
     this.head = this.scene.physics.add.sprite(this.xPos, this.yPos, "segment");
 
-    this.head.angle = 220;
+    this.head.angle = 90;
     this.head.setTint(1);
 
     for (let i = 0; i < this.segmentsRecordSize; i++) {
@@ -70,57 +149,19 @@ class Snake extends Phaser.GameObjects.GameObject {
 
       this.offset += this.initOffset;
       //for testing purposes
-      this.initPos.push({
+      /* this.initPos.push({
         x: this.segments.children.entries[i].x,
         y: this.segments.children.entries[i].y,
-      });
+      }); */
     }
 
     this.segments.children.entries.forEach((element) => {
       element.body.angle = this.head.angle;
     });
 
-    console.log(this.segments.children.entries.slice(-1));
+    //console.log(this.segments.children.entries.slice(-1));
 
     this.offset = this.initOffset;
-    this.createColliders();
-
-    this.keyboardMovement();
-
-    /* this.scene.input.keyboard.on("keydown-UP", () => {});
-
-    this.spacebar = this.scene.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.SPACE
-    ); */
-    console.log(this.scene.config.width);
-
-    debugger;
-  }
-
-  update() {
-    debugger;
-
-    this.worldBoundaryBehaviour();
-    this.snakeMovement();
-
-    this.collision = this.checkCollision(this.head.x, this.head.y);
-  }
-
-  keyboardMovement() {
-    this.scene.input.keyboard.on("keydown-LEFT", () => {
-      this.head.setAngularVelocity(-this.angularVelocity);
-    });
-    this.scene.input.keyboard.on("keyup-LEFT", () => {
-      this.head.setAngularVelocity(0);
-      //this.head.angle -= 5;git branch
-    });
-    this.scene.input.keyboard.on("keydown-RIGHT", () => {
-      this.head.setAngularVelocity(this.angularVelocity);
-    });
-
-    this.scene.input.keyboard.on("keyup-RIGHT", () => {
-      this.head.setAngularVelocity(0);
-    });
   }
   snakeMovement() {
     this.scene.physics.velocityFromAngle(
@@ -199,18 +240,19 @@ class PlayScene extends Phaser.Scene {
     this.config = config;
     this.segments = null;
 
-    this.WKey = null;
+    /* this.WKey = null;
     this.SKey = null;
     this.AKey = null;
-    this.DKey = null;
+    this.DKey = null; */
     this.apple = {};
+    this.snakes = [];
   }
   preload() {
     this.load.image("terrain", "assets/Tiled/terrain_atlas.png");
     this.load.image("segment", "assets/ovalSegment.png");
     this.load.image("apple", "assets/fujiApple.png");
 
-    this.load.tilemapTiledJSON("mappy", "assets/Tiled/snakeTilesTest.json");
+    this.load.tilemapTiledJSON("mappy", "assets/Tiled/snakeTiles.json");
   }
 
   create() {
@@ -225,6 +267,15 @@ class PlayScene extends Phaser.Scene {
     //this.initialise();
 
     this.snakeA = new Snake(this);
+    this.snakeA.xPos = 100;
+    this.snakeA.yPos = 100;
+    this.snakeA.player = 1;
+
+    this.snakeB = new Snake(this);
+    this.snakeB.xPos = 300;
+    this.snakeB.yPos = 300;
+    this.snakeB.player = 2;
+
     console.log(this.snakeA);
     this.generateApple();
     this.apple = this.physics.add
@@ -235,6 +286,9 @@ class PlayScene extends Phaser.Scene {
     this.add.existing(this.snakeA);
 
     this.snakeA.create();
+    this.snakeB.create();
+
+    this.snakes.push(this.snakeA, this.snakeB);
 
     console.log(this.snakeA.head);
     this.physics.add.collider(
@@ -254,6 +308,7 @@ class PlayScene extends Phaser.Scene {
       this
     ); */
     console.log(this.topLayer.tilemap.tileToWorldXY(2, 1));
+    console.log(this.topLayer.tilemap.hasTileAtWorldXY(65, 65));
     this.topLayer.tilemap.forEachTile((element) => {
       if (element.index > -1)
         console.log(this.topLayer.tilemap.tileToWorldXY(element.x, element.y));
@@ -279,18 +334,25 @@ class PlayScene extends Phaser.Scene {
     } */
     // console.log("time " + time);
     // console.log("delta " + delta);
+    /* this.snakes.forEach((snake)=>{
 
+    }) */
     this.snakeA.update();
+    this.snakeB.update();
     //console.log(this.game.loop.actualFps);
     //console.log(this.game.loop.time);
   }
 
   generateApple() {
-    let rndWidth = Math.floor(Phaser.Math.Between(0, this.config.width));
-    let rndHeight = Math.floor(Phaser.Math.Between(0, this.config.height));
+    do {
+      let rndWidth = Math.floor(Phaser.Math.Between(0, this.config.width));
+      let rndHeight = Math.floor(Phaser.Math.Between(0, this.config.height));
 
-    this.apple.x = rndWidth;
-    this.apple.y = rndHeight;
+      this.apple.x = rndWidth;
+      this.apple.y = rndHeight;
+    } while (
+      this.topLayer.tilemap.hasTileAtWorldXY(this.apple.x, this.apple.y)
+    );
   }
 
   eat() {
