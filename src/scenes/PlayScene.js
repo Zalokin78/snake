@@ -35,7 +35,7 @@ class Snake extends Phaser.GameObjects.GameObject {
 
   /*  preload() {
     this.image = this.load.image("segment", "assets/snake16Arrow.png");
-    debugger;
+    // debugger;
     blah
   } */
   create() {
@@ -51,11 +51,11 @@ class Snake extends Phaser.GameObjects.GameObject {
       Phaser.Input.Keyboard.KeyCodes.SPACE
     ); */
     //console.log(this.scene.config.width);
-    debugger;
+    // debugger;
   }
 
   update() {
-    debugger;
+    // debugger;
 
     this.worldBoundaryBehaviour();
     this.snakeMovement();
@@ -191,7 +191,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     });
     this.lastOffset = this.offset;
     this.offset = this.initOffset;
-    debugger;
+    // debugger;
   }
 
   checkCollision(x, y) {
@@ -239,6 +239,7 @@ class PlayScene extends Phaser.Scene {
 
     this.config = config;
     this.segments = null;
+    this.noOfPlayers = 2;
 
     /* this.WKey = null;
     this.SKey = null;
@@ -265,7 +266,12 @@ class PlayScene extends Phaser.Scene {
     this.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
     //this.initialise();
-
+    // this.snakes.push()
+    for (let i = 0; i < this.noOfPlayers; i++) {
+      this.snake = new Snake(this);
+      this.snakes.push(this.snake);
+    }
+    debugger;
     this.snakeA = new Snake(this);
     this.snakeA.xPos = 100;
     this.snakeA.yPos = 100;
