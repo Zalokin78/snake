@@ -271,8 +271,8 @@ class PlayScene extends Phaser.Scene {
       this.snake = new Snake(this);
       this.snakes.push(this.snake);
     }
-    debugger;
-    this.snakeA = new Snake(this);
+    //debugger;
+    /* this.snakeA = new Snake(this);
     this.snakeA.xPos = 100;
     this.snakeA.yPos = 100;
     this.snakeA.player = 1;
@@ -280,7 +280,18 @@ class PlayScene extends Phaser.Scene {
     this.snakeB = new Snake(this);
     this.snakeB.xPos = 300;
     this.snakeB.yPos = 300;
-    this.snakeB.player = 2;
+    this.snakeB.player = 2; */
+
+    //debugger;
+
+    this.snakes[0].xPos = 200;
+    this.snakes[0].yPos = 200;
+    this.snakes[0].player = 1;
+    if (this.noOfPlayers > 1) {
+      this.snakes[1].xPos = 400;
+      this.snakes[1].yPos = 400;
+      this.snakes[1].player = 2;
+    }
 
     console.log(this.snakeA);
     this.generateApple();
@@ -289,21 +300,25 @@ class PlayScene extends Phaser.Scene {
       .setOrigin(0.5, 0.5)
       .setPushable(false);
 
-    this.add.existing(this.snakeA);
+    //this.add.existing(this.snakeA);
 
-    this.snakeA.create();
-    this.snakeB.create();
+    /* this.snakeA.create();
+    this.snakeB.create(); */
+    this.snakes.forEach((snake) => {
+      snake.create();
+    });
+    debugger;
 
-    this.snakes.push(this.snakeA, this.snakeB);
+    //this.snakes.push(this.snakeA, this.snakeB);
 
-    console.log(this.snakeA.head);
-    this.physics.add.collider(
+    //console.log(this.snakeA.head);
+    /* this.physics.add.collider(
       this.snakeA.head,
       this.apple,
       this.eat,
       null,
       this
-    );
+    ); */
     /* this.testSprite = this.physics.add.sprite(200, 200, "segment");
     console.log(this.topLayer);
     this.physics.add.collider(
@@ -343,8 +358,13 @@ class PlayScene extends Phaser.Scene {
     /* this.snakes.forEach((snake)=>{
 
     }) */
-    this.snakeA.update();
-    this.snakeB.update();
+    /* this.snakeA.update();
+    this.snakeB.update(); */
+
+    this.snakes.forEach((snake) => {
+      snake.update();
+    });
+
     //console.log(this.game.loop.actualFps);
     //console.log(this.game.loop.time);
   }
