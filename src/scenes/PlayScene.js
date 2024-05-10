@@ -19,27 +19,13 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.initOffset = Math.round((1 / this.velocity) * this.segmentGap);
     this.offset = this.initOffset;
     this.segmentsRecordSize = 500;
-    //this.testCounter = 0;
     this.collision = false;
     this.lastOffset = null;
     this.angularVelocity = 300;
     this.velMultiplyer = 3;
-    //segments pos test variables
-    /* this.segmentsTest = this.scene.physics.add.group();
-    this.posArr = [];
-    this.xPosTest = 100;
-    this.yPosTest = 100;
-    this.offsetTest = 10;
-    this.initPos = []; */
   }
 
-  /*  preload() {
-    this.image = this.load.image("segment", "assets/snake16Arrow.png");
-    // debugger;
-    blah
-  } */
   create() {
-    console.log(this.player);
     //console.log(this.scene.topLayer);
     this.createSnake();
     this.createColliders();
@@ -50,13 +36,9 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.spacebar = this.scene.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
     ); */
-    //console.log(this.scene.config.width);
-    // debugger;
   }
 
   update() {
-    // debugger;
-
     this.worldBoundaryBehaviour();
     this.snakeMovement();
 
@@ -81,19 +63,12 @@ class Snake extends Phaser.GameObjects.GameObject {
       });
     }
 
-    /* if (this.AKey.isDown == true) {
-        this.head.setAngularVelocity(-this.angularVelocity);
-      }
-      if (this.DKey.isDown == true) {
-        this.head.setAngularVelocity(this.angularVelocity);
-      } */
     if (this.player == 2) {
       this.scene.input.keyboard.on("keydown-A", () => {
         this.head.setAngularVelocity(-this.angularVelocity);
       });
       this.scene.input.keyboard.on("keyup-A", () => {
         this.head.setAngularVelocity(0);
-        //this.head.angle -= 5;git branch
       });
       this.scene.input.keyboard.on("keydown-D", () => {
         this.head.setAngularVelocity(this.angularVelocity);
@@ -103,20 +78,6 @@ class Snake extends Phaser.GameObjects.GameObject {
         this.head.setAngularVelocity(0);
       });
     }
-    /* this.scene.input.keyboard.on("keydown-LEFT", () => {
-        this.head.setAngularVelocity(-this.angularVelocity);
-      });
-      this.scene.input.keyboard.on("keyup-LEFT", () => {
-        this.head.setAngularVelocity(0);
-        //this.head.angle -= 5;git branch
-      });
-      this.scene.input.keyboard.on("keydown-RIGHT", () => {
-        this.head.setAngularVelocity(this.angularVelocity);
-      });
-
-      this.scene.input.keyboard.on("keyup-RIGHT", () => {
-        this.head.setAngularVelocity(0);
-      }); */
   }
 
   createSnake() {
@@ -148,18 +109,11 @@ class Snake extends Phaser.GameObjects.GameObject {
         .setOrigin(0.5);
 
       this.offset += this.initOffset;
-      //for testing purposes
-      /* this.initPos.push({
-        x: this.segments.children.entries[i].x,
-        y: this.segments.children.entries[i].y,
-      }); */
     }
 
     this.segments.children.entries.forEach((element) => {
       element.body.angle = this.head.angle;
     });
-
-    //console.log(this.segments.children.entries.slice(-1));
 
     this.offset = this.initOffset;
   }
@@ -169,11 +123,6 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.velocity,
       this.head.body.velocity
     );
-
-    /* this.head.x +=
-      Math.cos(Math.PI * (this.head.angle / 180)) * this.velMultiplyer; //* 2.635;
-    this.head.y +=
-      Math.sin(Math.PI * (this.head.angle / 180)) * this.velMultiplyer; //* 2.635; */
 
     this.segmentsRecord.unshift({
       x: this.head.x,
@@ -240,11 +189,6 @@ class PlayScene extends Phaser.Scene {
     this.config = config;
     this.segments = null;
     this.noOfPlayers = 2;
-
-    /* this.WKey = null;
-    this.SKey = null;
-    this.AKey = null;
-    this.DKey = null; */
     this.apple = {};
     this.snakes = [];
   }
@@ -271,18 +215,6 @@ class PlayScene extends Phaser.Scene {
       this.snake = new Snake(this);
       this.snakes.push(this.snake);
     }
-    //debugger;
-    /* this.snakeA = new Snake(this);
-    this.snakeA.xPos = 100;
-    this.snakeA.yPos = 100;
-    this.snakeA.player = 1;
-
-    this.snakeB = new Snake(this);
-    this.snakeB.xPos = 300;
-    this.snakeB.yPos = 300;
-    this.snakeB.player = 2; */
-
-    //debugger;
 
     this.snakes[0].xPos = 200;
     this.snakes[0].yPos = 200;
@@ -302,19 +234,10 @@ class PlayScene extends Phaser.Scene {
 
     //this.add.existing(this.snakeA);
 
-    /* this.snakeA.create();
-    this.snakeB.create(); */
     this.snakes.forEach((snake) => {
       snake.create();
     });
-    debugger;
 
-    //this.snakes.push(this.snakeA, this.snakeB);
-
-    //console.log(this.snakeA.head);
-    /* this.snakes.forEach((snake) => {
-      this.physics.add.collider(snake.head, this.apple, this.eat, null, this);
-    }); */
     this.snakes.forEach((snake) => {
       this.physics.add.collider(
         snake.head,
@@ -327,13 +250,6 @@ class PlayScene extends Phaser.Scene {
       );
     });
 
-    /* this.physics.add.collider(
-      this.snakeA.head,
-      this.apple,
-      this.eat,
-      null,
-      this
-    ); */
     /* this.testSprite = this.physics.add.sprite(200, 200, "segment");
     console.log(this.topLayer);
     this.physics.add.collider(
@@ -373,8 +289,6 @@ class PlayScene extends Phaser.Scene {
     /* this.snakes.forEach((snake)=>{
 
     }) */
-    /* this.snakeA.update();
-    this.snakeB.update(); */
 
     this.snakes.forEach((snake) => {
       snake.update();
@@ -397,21 +311,6 @@ class PlayScene extends Phaser.Scene {
   }
 
   eat(snake) {
-    /* this.generateApple();
-    this.snakeA.segments
-      .create(
-        this.snakeA.segmentsRecord[
-          this.snakeA.lastOffset + this.snakeA.initOffset
-        ].x,
-        this.snakeA.segmentsRecord[
-          this.snakeA.lastOffset + this.snakeA.initOffset
-        ].y,
-        "segment"
-      )
-      .setOrigin(0.5);
-
-    console.log(this.snakeA.snakeSize);
-    this.snakeA.snakeSize++; */
     this.generateApple();
     snake.segments
       .create(
@@ -421,7 +320,6 @@ class PlayScene extends Phaser.Scene {
       )
       .setOrigin(0.5);
 
-    //console.log(this.snakeA.snakeSize);
     snake.snakeSize++;
 
     //this.hasAte = true;
@@ -430,7 +328,6 @@ class PlayScene extends Phaser.Scene {
     let mappy = this.add.tilemap("mappy");
 
     let terrain = mappy.addTilesetImage("terrain_atlas", "terrain");
-    //this.segments = this.physics.add.group();
 
     let botLayer = mappy.createLayer("bot", terrain, 0, 0);
     let grassLayer = mappy.createLayer("grass", terrain, 0, 0);
