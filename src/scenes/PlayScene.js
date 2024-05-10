@@ -4,7 +4,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.snakeSize = 7;
+    this.snakeSize = 10;
     //this.xPos = 100;
     //this.yPos = 100;
     this.segments = this.scene.physics.add.group();
@@ -330,6 +330,12 @@ class PlayScene extends Phaser.Scene {
         "segment"
       )
       .setOrigin(0.5);
+    this.physics.add.collider(
+      snake.head,
+      snake.segments.children.entries.slice(1),
+
+      this.scene.testFunc2
+    );
 
     //snake.snakeSize++;
 
