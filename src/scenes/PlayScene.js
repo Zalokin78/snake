@@ -4,7 +4,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.snakeSize = 3;
+    this.snakeSize = 7;
     //this.xPos = 100;
     //this.yPos = 100;
     this.segments = this.scene.physics.add.group();
@@ -42,7 +42,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.worldBoundaryBehaviour();
     this.snakeMovement();
 
-    this.collision = this.checkCollision(this.head.x, this.head.y);
+    //this.collision = this.checkCollision(this.head.x, this.head.y);
   }
 
   keyboardMovement(player) {
@@ -143,7 +143,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     // debugger;
   }
 
-  checkCollision(x, y) {
+  /* checkCollision(x, y) {
     this.segments.children.entries.forEach((element) => {
       if (element.x == x && element.y == y) {
         this.collision = true;
@@ -154,7 +154,7 @@ class Snake extends Phaser.GameObjects.GameObject {
 
     return this.collision;
   }
-
+ */
   createColliders() {
     console.log(this.head);
     this.scene.physics.add.collider(
@@ -168,6 +168,16 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.head,
       this.scene.topLayer,
       this.scene.testFunc2,
+      null,
+      this
+    );
+
+    this.scene.physics.add.collider(
+      this.head,
+      this.scene.apple,
+      () => {
+        this.scene.eat(this);
+      },
       null,
       this
     );
@@ -238,7 +248,8 @@ class PlayScene extends Phaser.Scene {
       snake.create();
     });
 
-    this.snakes.forEach((snake) => {
+    //apple collision
+    /* this.snakes.forEach((snake) => {
       this.physics.add.collider(
         snake.head,
         this.apple,
@@ -248,7 +259,7 @@ class PlayScene extends Phaser.Scene {
         null,
         this
       );
-    });
+    }); */
 
     /* this.testSprite = this.physics.add.sprite(200, 200, "segment");
     console.log(this.topLayer);
@@ -320,7 +331,7 @@ class PlayScene extends Phaser.Scene {
       )
       .setOrigin(0.5);
 
-    snake.snakeSize++;
+    //snake.snakeSize++;
 
     //this.hasAte = true;
   }
