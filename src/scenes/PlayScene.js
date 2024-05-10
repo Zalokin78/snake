@@ -312,6 +312,21 @@ class PlayScene extends Phaser.Scene {
     //this.snakes.push(this.snakeA, this.snakeB);
 
     //console.log(this.snakeA.head);
+    /* this.snakes.forEach((snake) => {
+      this.physics.add.collider(snake.head, this.apple, this.eat, null, this);
+    }); */
+    this.snakes.forEach((snake) => {
+      this.physics.add.collider(
+        snake.head,
+        this.apple,
+        () => {
+          this.eat(snake);
+        },
+        null,
+        this
+      );
+    });
+
     /* this.physics.add.collider(
       this.snakeA.head,
       this.apple,
@@ -328,12 +343,12 @@ class PlayScene extends Phaser.Scene {
       null,
       this
     ); */
-    console.log(this.topLayer.tilemap.tileToWorldXY(2, 1));
-    console.log(this.topLayer.tilemap.hasTileAtWorldXY(65, 65));
-    this.topLayer.tilemap.forEachTile((element) => {
+    // console.log(this.topLayer.tilemap.tileToWorldXY(2, 1));
+    // console.log(this.topLayer.tilemap.hasTileAtWorldXY(65, 65));
+    /* this.topLayer.tilemap.forEachTile((element) => {
       if (element.index > -1)
         console.log(this.topLayer.tilemap.tileToWorldXY(element.x, element.y));
-    });
+    }); */
   }
 
   update(/* time, delta */) {
@@ -381,8 +396,8 @@ class PlayScene extends Phaser.Scene {
     );
   }
 
-  eat() {
-    this.generateApple();
+  eat(snake) {
+    /* this.generateApple();
     this.snakeA.segments
       .create(
         this.snakeA.segmentsRecord[
@@ -396,7 +411,18 @@ class PlayScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     console.log(this.snakeA.snakeSize);
-    this.snakeA.snakeSize++;
+    this.snakeA.snakeSize++; */
+    this.generateApple();
+    snake.segments
+      .create(
+        snake.segmentsRecord[snake.lastOffset + snake.initOffset].x,
+        snake.segmentsRecord[snake.lastOffset + snake.initOffset].y,
+        "segment"
+      )
+      .setOrigin(0.5);
+
+    //console.log(this.snakeA.snakeSize);
+    snake.snakeSize++;
 
     //this.hasAte = true;
   }
