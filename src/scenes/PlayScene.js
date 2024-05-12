@@ -176,11 +176,36 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.head,
       this.scene.apple,
       () => {
-        this.scene.eat(this);
+        // this.scene.eat(this);
+        this.eat(this);
       },
       null,
       this
     );
+  }
+
+  eat() {
+    this.scene.generateApple();
+    let segmentRef = this.lastOffset + this.initOffset;
+    let segment = this.segments
+      .create(
+        this.segmentsRecord[segmentRef].x,
+        this.segmentsRecord[segmentRef].y,
+        "segment"
+      )
+      .setOrigin(0.5);
+    this.scene.physics.add.collider(
+      segment,
+      this.head,
+
+      this.scene.testFunc2
+    );
+    console.log(this.head);
+    console.log(segment);
+
+    //snake.snakeSize++;
+
+    //this.hasAte = true;
   }
 
   worldBoundaryBehaviour() {
@@ -321,7 +346,7 @@ class PlayScene extends Phaser.Scene {
     );
   }
 
-  eat(snake) {
+  /* eat(snake) {
     this.generateApple();
     snake.segments
       .create(
@@ -340,7 +365,7 @@ class PlayScene extends Phaser.Scene {
     //snake.snakeSize++;
 
     //this.hasAte = true;
-  }
+  } */
   tileSet() {
     let mappy = this.add.tilemap("mappy");
 
