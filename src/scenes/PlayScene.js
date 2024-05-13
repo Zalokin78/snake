@@ -380,9 +380,16 @@ class PlayScene extends Phaser.Scene {
     this.topLayer.setCollisionByProperty({ collides: true });
   }
 
-  testFunc2() {
-    console.log("RESTART II!!!!!");
-    alert("Tile collision!!");
+  testFunc2(type) {
+    if ((type = "self")) {
+      alert("you collided with yourself");
+    }
+    if ((type = "tile")) {
+      alert("you collided with a tile");
+    }
+
+    //console.log("RESTART II!!!!!");
+    //alert("Tile collision!!");
   }
 }
 
