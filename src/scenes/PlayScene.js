@@ -157,7 +157,7 @@ class Snake extends Phaser.GameObjects.GameObject {
  */
   createColliders() {
     console.log(this.head);
-    this.scene.physics.add.collider(
+    /* this.scene.physics.add.collider(
       this.head,
       this.segments.children.entries.slice(1),
 
@@ -168,6 +168,26 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.head,
       this.scene.topLayer,
       this.scene.testFunc2,
+      null,
+      this
+    ); */
+
+    this.scene.physics.add.collider(
+      this.head,
+      this.segments.children.entries.slice(1),
+      () => {
+        this.scene.testFunc2("self");
+      },
+      null,
+      this
+    );
+
+    this.scene.physics.add.collider(
+      this.head,
+      this.scene.topLayer,
+      () => {
+        this.scene.testFunc2("tile");
+      },
       null,
       this
     );
@@ -197,8 +217,11 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.scene.physics.add.collider(
       segment,
       this.head,
+      () => {
+        this.scene.testFunc2("self");
+      }
 
-      this.scene.testFunc2
+      // this.scene.testFunc2
     );
     console.log(this.head);
     console.log(segment);
@@ -301,6 +324,8 @@ class PlayScene extends Phaser.Scene {
       if (element.index > -1)
         console.log(this.topLayer.tilemap.tileToWorldXY(element.x, element.y));
     }); */
+    //console.log(this.snakes[0].body.set);
+    //this.snakes[0].snake
   }
 
   update(/* time, delta */) {
@@ -380,11 +405,12 @@ class PlayScene extends Phaser.Scene {
     this.topLayer.setCollisionByProperty({ collides: true });
   }
 
-  testFunc2(type) {
-    if ((type = "self")) {
+  testFunc2(collType) {
+    console.log(collType);
+    //debugger;
+    if (collType == "self") {
       alert("you collided with yourself");
-    }
-    if ((type = "tile")) {
+    } else if (collType == "tile") {
       alert("you collided with a tile");
     }
 
