@@ -23,6 +23,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.lastOffset = null;
     this.angularVelocity = 300;
     this.velMultiplyer = 3;
+    //this.playerTint = "ff0000";
   }
 
   create() {
@@ -46,7 +47,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   keyboardMovement(player) {
-    if (this.player == 1) {
+    if (this.player == 0) {
       this.scene.input.keyboard.on("keydown-LEFT", () => {
         this.head.setAngularVelocity(-this.angularVelocity);
       });
@@ -63,7 +64,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       });
     }
 
-    if (this.player == 2) {
+    if (this.player == 1) {
       this.scene.input.keyboard.on("keydown-A", () => {
         this.head.setAngularVelocity(-this.angularVelocity);
       });
@@ -84,7 +85,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.head = this.scene.physics.add.sprite(this.xPos, this.yPos, "segment");
 
     this.head.angle = 90;
-    this.head.setTint(1);
+    this.head.setTint(0xff0000);
 
     for (let i = 0; i < this.segmentsRecordSize; i++) {
       this.xPos -=
@@ -113,6 +114,7 @@ class Snake extends Phaser.GameObjects.GameObject {
 
     this.segments.children.entries.forEach((element) => {
       element.body.angle = this.head.angle;
+      element.body.setImmovable(true);
     });
 
     this.offset = this.initOffset;
@@ -176,7 +178,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.head,
       this.segments.children.entries.slice(1),
       () => {
-        this.scene.testFunc2("self");
+        this.scene.testFunc2("self", this.player);
       },
       null,
       this
@@ -186,7 +188,8 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.head,
       this.scene.topLayer,
       () => {
-        this.scene.testFunc2("tile");
+        // this.scene.testFunc2("tile");
+        this.scene.testFunc2("tile", this.player);
       },
       null,
       this
@@ -218,11 +221,12 @@ class Snake extends Phaser.GameObjects.GameObject {
       segment,
       this.head,
       () => {
-        this.scene.testFunc2("self");
+        this.scene.testFunc2("self", this.player);
       }
 
       // this.scene.testFunc2
     );
+    segment.body.setImmovable(true);
     console.log(this.head);
     console.log(segment);
 
@@ -259,7 +263,6 @@ class PlayScene extends Phaser.Scene {
   }
 
   create() {
-    console.log(Snake);
     this.tileSet();
 
     this.WKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -270,20 +273,22 @@ class PlayScene extends Phaser.Scene {
     //this.initialise();
     // this.snakes.push()
     for (let i = 0; i < this.noOfPlayers; i++) {
+      console.log(i);
       this.snake = new Snake(this);
       this.snakes.push(this.snake);
+      this.snakes[i].player = i;
+      //console.log(this.snakes[i]);
     }
 
     this.snakes[0].xPos = 200;
     this.snakes[0].yPos = 200;
-    this.snakes[0].player = 1;
+    //this.snakes[0].player = 1;
     if (this.noOfPlayers > 1) {
       this.snakes[1].xPos = 400;
       this.snakes[1].yPos = 400;
-      this.snakes[1].player = 2;
+      //this.snakes[1].player = 2;
     }
 
-    console.log(this.snakeA);
     this.generateApple();
     this.apple = this.physics.add
       .sprite(this.apple.x, this.apple.y, "apple")
@@ -294,6 +299,12 @@ class PlayScene extends Phaser.Scene {
 
     this.snakes.forEach((snake) => {
       snake.create();
+    });
+
+    console.log(this.snakes[0].segments.children.entries);
+    this.snakes[0].segments.children.entries.forEach((segment) => {
+      segment.setTint(0xff0000);
+      //console.log(segment);
     });
 
     //apple collision
@@ -405,13 +416,13 @@ class PlayScene extends Phaser.Scene {
     this.topLayer.setCollisionByProperty({ collides: true });
   }
 
-  testFunc2(collType) {
+  testFunc2(collType, player) {
     console.log(collType);
     //debugger;
     if (collType == "self") {
-      alert("you collided with yourself");
+      alert(`Player ${player} collided with itself`);
     } else if (collType == "tile") {
-      alert("you collided with a tile");
+      alert(`Player ${player} collided with a tile`);
     }
 
     //console.log("RESTART II!!!!!");
