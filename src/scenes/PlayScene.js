@@ -5,12 +5,9 @@ class Snake extends Phaser.GameObjects.GameObject {
     super(scene);
     this.segments = null;
     this.snakeSize = 10;
-    //this.xPos = 100;
-    //this.yPos = 100;
     this.segments = this.scene.physics.add.group();
     this.segmentsRecord = [];
     this.index = 0;
-    //this.stutteredIndex = null;
     this.modulus = 0;
     this.indexOffset = 0;
     this.segmentGap = 1100;
@@ -23,10 +20,22 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.lastOffset = null;
     this.angularVelocity = 300;
     this.velMultiplyer = 3;
+    this.keyControls = [
+      ["keyup", "keydown"],
+      ["LEFT", "RIGHT", "A", "D"],
+    ];
+    this.keys = {
+      plyr1: ["LEFT", "RIGHT"],
+      plyr2: ["A", "D"],
+      // type: ["keyup", "keydown"],
+    };
+    this.keyType = ["keyup", "keydown"];
+
     //this.playerTint = "ff0000";
   }
 
   create() {
+    //console.log(this.velMultiplyer);
     //console.log(this.scene.topLayer);
     this.createSnake();
     this.createColliders();
@@ -46,14 +55,45 @@ class Snake extends Phaser.GameObjects.GameObject {
     //this.collision = this.checkCollision(this.head.x, this.head.y);
   }
 
-  keyboardMovement(player) {
+  keyboardMovement() {
+    let type = 1;
+    let key = 0;
+    let counter = 0;
+    //Object.values((this.keys)=>{});
+    for (const plyr in this.keys) {
+      if (counter > 1) key = 1;
+      //console.log(element);
+      for (let i = 0; i < 4; i++) {
+        if (type == 1) {
+          type = 0;
+        } else {
+          type = 1;
+        }
+
+        // this.scene.input.keyboard.on(`${this.keyControls[keyType]}-${this.keyControls[keyDir]}`);
+        console.log(`${this.keyType[type]}-${plyr[key]}`);
+      }
+      counter++;
+    }
+
+    /* let keyType = 1;
+    let keyDir = 0;
+    for (let i = 0; i < 4; i++) {
+      if (keyType == 1) {
+        keyType = 0;
+      } else {
+        keyType = 1;
+      }
+      if (i > 1) keyDir = 1;
+      // this.scene.input.keyboard.on(`${this.keyControls[keyType]}-${this.keyControls[keyDir]}`);
+      console.log(`${this.keyType[keyType]}-${this.keys[keyDir]}`);
+    } */
     if (this.player == 0) {
       this.scene.input.keyboard.on("keydown-LEFT", () => {
         this.head.setAngularVelocity(-this.angularVelocity);
       });
       this.scene.input.keyboard.on("keyup-LEFT", () => {
         this.head.setAngularVelocity(0);
-        //this.head.angle -= 5;git branch
       });
       this.scene.input.keyboard.on("keydown-RIGHT", () => {
         this.head.setAngularVelocity(this.angularVelocity);
