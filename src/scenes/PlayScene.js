@@ -56,14 +56,14 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   keyboardMovement() {
-    let type = 1;
+    /* let type = 1;
     let key = 0;
     let counter = 0;
     //Object.values((this.keys)=>{});
     for (const plyr in this.keys) {
       if (counter > 1) key = 1;
       //console.log(element);
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 2; i++) {
         if (type == 1) {
           type = 0;
         } else {
@@ -74,8 +74,67 @@ class Snake extends Phaser.GameObjects.GameObject {
         console.log(`${this.keyType[type]}-${plyr[key]}`);
       }
       counter++;
-    }
+    } */
+    /* for (const plyr in this.keys) {
+      // plyr.forEach((key) => {
+      //   console.log(key);
+      // });
+      console.log(plyr);
+      console.log(plyr[0]);
+    } */
+    console.log(Object.values(this.keys));
+    //the one below works but need to refactor
+    /* for (let value of Object.values(this.keys)) {
+      let dir = 0;
+      for (let i = 0; i < 4; i++) {
+        if (i < 2) {
+          console.log(value[0], this.keyType[dir]);
+          dir++;
+          if (dir > 1) dir = 0;
+        } else {
+          console.log(value[1], this.keyType[dir]);
+          dir++;
+        }
+      }
+    } */
+    //the refactoring works but no this.angularVelocity change (also far too complex)
+    /* for (let value of Object.values(this.keys)) {
+      console.log(value);
+      let dir = 1;
+      let element = 0;
+      let iterator = 0;
+      for (let i = 0; i < 4; i++) {
+        if (dir == 1) {
+          dir = 0;
+        } else {
+          dir = 1;
+        }
+        if (iterator > 1) element > 0 ? (element = 1) : element++;
+        console.log(value[element], this.keyType[dir]);
+        this.scene.input.keyboard.on(
+          `${this.keyType[dir]}-${value[element]}`,
+          () => {
+            this.head.setAngularVelocity(this.angularVelocity);
+          }
+        );
+        console.log(`${this.keyType[dir]}-${value[element]}`);
+        iterator++;
 
+        // if (i > 1) element++;
+      }
+      //element = 0;
+    }
+ */
+    //array iteration with double printing of each element in the array
+    /* let testArr = ["X", "Y"];
+    let testSelect = 0;
+    let printCount = 0;
+
+    for (let i = 0; i < 4; i++) {
+      if (printCount > 1) testSelect > 0 ? (testSelect = 1) : testSelect++;
+      console.log(testArr[testSelect]);
+      printCount++;
+    } */
     /* let keyType = 1;
     let keyDir = 0;
     for (let i = 0; i < 4; i++) {
@@ -88,37 +147,63 @@ class Snake extends Phaser.GameObjects.GameObject {
       // this.scene.input.keyboard.on(`${this.keyControls[keyType]}-${this.keyControls[keyDir]}`);
       console.log(`${this.keyType[keyType]}-${this.keys[keyDir]}`);
     } */
-    if (this.player == 0) {
-      this.scene.input.keyboard.on("keydown-LEFT", () => {
-        this.head.setAngularVelocity(-this.angularVelocity);
-      });
-      this.scene.input.keyboard.on("keyup-LEFT", () => {
-        this.head.setAngularVelocity(0);
-      });
-      this.scene.input.keyboard.on("keydown-RIGHT", () => {
-        this.head.setAngularVelocity(this.angularVelocity);
-      });
 
-      this.scene.input.keyboard.on("keyup-RIGHT", () => {
-        this.head.setAngularVelocity(0);
-      });
+    //************new refactoring */
+    /* let keys = Object.keys(this.keys);
+    console.log(keys);
+    for (let dir of Object.values(keys)) {
+      console.log(dir);
     }
+    console.log(Object.values(Object.keys(this.keys)[0]));
+    console.log(this.keys[Object.keys(this.keys)[1]]); */
+    let playerKeys = this.keys[Object.keys(this.keys)[this.player]];
+    //for (let dir of Object.values(Object.keys(this.keys)[this.player])) {
+    this.scene.input.keyboard.on(`keydown-${playerKeys[0]}`, () => {
+      this.head.setAngularVelocity(-this.angularVelocity);
+    });
+    this.scene.input.keyboard.on(`keyup-${playerKeys[0]}`, () => {
+      this.head.setAngularVelocity(0);
+    });
+    this.scene.input.keyboard.on(`keydown-${playerKeys[1]}`, () => {
+      this.head.setAngularVelocity(this.angularVelocity);
+    });
+    this.scene.input.keyboard.on(`keyup-${playerKeys[1]}`, () => {
+      this.head.setAngularVelocity(0);
+    });
 
-    if (this.player == 1) {
-      this.scene.input.keyboard.on("keydown-A", () => {
-        this.head.setAngularVelocity(-this.angularVelocity);
-      });
-      this.scene.input.keyboard.on("keyup-A", () => {
-        this.head.setAngularVelocity(0);
-      });
-      this.scene.input.keyboard.on("keydown-D", () => {
-        this.head.setAngularVelocity(this.angularVelocity);
-      });
+    //}
 
-      this.scene.input.keyboard.on("keyup-D", () => {
-        this.head.setAngularVelocity(0);
-      });
-    }
+    /* if (this.player == 0) {
+        this.scene.input.keyboard.on("keydown-LEFT", () => {
+          this.head.setAngularVelocity(-this.angularVelocity);
+        });
+        this.scene.input.keyboard.on("keyup-LEFT", () => {
+          this.head.setAngularVelocity(0);
+        });
+        this.scene.input.keyboard.on("keydown-RIGHT", () => {
+          this.head.setAngularVelocity(this.angularVelocity);
+        });
+
+        this.scene.input.keyboard.on("keyup-RIGHT", () => {
+          this.head.setAngularVelocity(0);
+        });
+      }
+
+      if (this.player == 1) {
+        this.scene.input.keyboard.on("keydown-A", () => {
+          this.head.setAngularVelocity(-this.angularVelocity);
+        });
+        this.scene.input.keyboard.on("keyup-A", () => {
+          this.head.setAngularVelocity(0);
+        });
+        this.scene.input.keyboard.on("keydown-D", () => {
+          this.head.setAngularVelocity(this.angularVelocity);
+        });
+
+        this.scene.input.keyboard.on("keyup-D", () => {
+          this.head.setAngularVelocity(0);
+        });
+      } */
   }
 
   createSnake() {
