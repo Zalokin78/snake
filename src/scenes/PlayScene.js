@@ -6,6 +6,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.segments = null;
     this.snakeSize = 10;
     this.segments = this.scene.physics.add.group();
+    this.collisionBody = this.scene.physics.add.group();
     this.segmentsRecord = [];
     this.index = 0;
     this.modulus = 0;
@@ -106,7 +107,25 @@ class Snake extends Phaser.GameObjects.GameObject {
     });
 
     this.offset = this.initOffset;
+
+    // this.collisionBody.add(this.segments);
+    // this.collisionBody.add(this.head);
+    console.log(this.collisionBody);
+    /* this.collisionObjs = this.collisionBody.children.entries.forEach(
+      (segment) => {
+        [...segment];
+      }
+    );
+    console.log(this.collisionObjs); */
+    console.log(this.segments.children.entries);
+    this.collisionObjs = this.segments.children.entries;
+    console.log(this.head);
+    //this.collisionObjs.push(this.head);
+    console.log(this.collisionObjs);
+    this.collisionBody.add(this);
+    console.log(this.collisionBody);
   }
+
   snakeMovement() {
     this.scene.physics.velocityFromAngle(
       this.head.angle,
@@ -146,7 +165,10 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
  */
   createColliders() {
-    console.log(this.head);
+    /* console.log(this.scene.snakes[0].collisionObjs[0]);
+    console.log(this.collisionBody.children.entries);
+    console.log(this.head); */
+    console.log(this.scene.snakes[0].segments.children.entries);
     /* this.scene.physics.add.collider(
       this.head,
       this.segments.children.entries.slice(1),
@@ -175,6 +197,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.scene.physics.add.collider(
       this.head,
       this.scene.snakes[this.player == 0 ? 1 : 0].segments.children.entries,
+      //this.scene.snakes[this.player == 0 ? 1 : 0].collisionObjs,
       () => {
         this.scene.testFunc2("other", this.player), null, this;
       }
