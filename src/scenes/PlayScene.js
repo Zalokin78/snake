@@ -34,8 +34,8 @@ class Snake extends Phaser.GameObjects.GameObject {
     //console.log(this.velMultiplyer);
     //console.log(this.scene.topLayer);
     this.createSnake();
-    this.createColliders();
-    this.keyboardMovement(2);
+    //this.createColliders();
+    this.keyboardMovement();
 
     /* this.scene.input.keyboard.on("keydown-UP", () => {});
 
@@ -45,6 +45,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   update() {
+    //console.log(this.head);
     this.worldBoundaryBehaviour();
     this.snakeMovement();
 
@@ -71,21 +72,26 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   createSnake() {
-    this.head = this.scene.physics.add.sprite(this.xPos, this.yPos, "segment");
+    this.angle = 90;
+    //this.head = this.scene.physics.add.sprite(this.xPos, this.yPos, "segment");
 
-    this.head.angle = 90;
+    //this.head.angle = 90;
     //this.head.setTint(0xff0000);
 
     for (let i = 0; i < this.segmentsRecordSize; i++) {
-      this.xPos -=
-        Math.cos(Math.PI * (this.head.angle / 180)) * this.velMultiplyer; //* 2.635;
-      this.yPos -=
-        Math.sin(Math.PI * (this.head.angle / 180)) * this.velMultiplyer; //* 2.635;
+      this.xPos -= Math.cos(Math.PI * (this.angle / 180)) * this.velMultiplyer; //* 2.635;
+      this.yPos -= Math.sin(Math.PI * (this.angle / 180)) * this.velMultiplyer;
+      /* if (i == 0) {
+        this.isHead = true;
+      } else {
+        this.isHead = false;
+      } */
 
       this.segmentsRecord.push({
         x: this.xPos,
         y: this.yPos,
-        angle: this.head.angle,
+        angle: this.angle,
+        isHead: i == 0 ? true : false,
       });
     }
 
@@ -101,8 +107,12 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.offset += this.initOffset;
     }
 
+    this.head = this.segments.children.entries[0];
+
+    this.head.angle = this.segments.children.entries[0].body.angle;
+
     this.segments.children.entries.forEach((segment) => {
-      segment.body.angle = this.head.angle;
+      segment.body.angle = this.angle;
       segment.body.setImmovable(true);
     });
 
@@ -133,7 +143,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.head.body.velocity
     );
 
-    this.segmentsRecord.unshift({
+    this.segmentsRecord.splice(1, 0, {
       x: this.head.x,
       y: this.head.y,
       angle: this.head.angle,
@@ -149,7 +159,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     });
     this.lastOffset = this.offset;
     this.offset = this.initOffset;
-    // debugger;
+    debugger;
   }
 
   /* checkCollision(x, y) {
