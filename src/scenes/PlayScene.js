@@ -11,7 +11,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.index = 0;
     this.modulus = 0;
     this.indexOffset = 0;
-    this.segmentGap = 1100;
+    this.segmentGap = 1200;
     this.maxOffset = 0;
     this.velocity = 200; //130
     this.initOffset = Math.round((1 / this.velocity) * this.segmentGap);
@@ -95,11 +95,12 @@ class Snake extends Phaser.GameObjects.GameObject {
       });
     }
 
+    //note that 1st one of the array is head, so the offset is applied to all but the head hence the following ternary operator.
     for (let i = 0; i < this.snakeSize; i++) {
       this.segments
         .create(
-          this.segmentsRecord[this.offset].x,
-          this.segmentsRecord[this.offset].y,
+          this.segmentsRecord[i == 0 ? 0 : this.offset].x,
+          this.segmentsRecord[i == 0 ? 0 : this.offset].y,
           "segment"
         )
         .setOrigin(0.5);
@@ -109,7 +110,7 @@ class Snake extends Phaser.GameObjects.GameObject {
 
     this.head = this.segments.children.entries[0];
 
-    this.head.test = "blah";
+    //this.head.test = "blah";
 
     this.segments.children.entries[0].body.angle = this.angle;
 
@@ -119,10 +120,10 @@ class Snake extends Phaser.GameObjects.GameObject {
 
     console.log(this.segments.children.entries[0].body.angle);
 
-    debugger;
+    //debugger;
 
     this.segments.children.entries.forEach((segment) => {
-      segment.body.angle = this.angle;
+      segment.body.angle = this.head.angle;
       segment.body.setImmovable(true);
     });
 
@@ -171,7 +172,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     });
     this.lastOffset = this.offset;
     this.offset = this.initOffset;
-    debugger;
+    //debugger;
   }
 
   /* checkCollision(x, y) {
@@ -208,13 +209,20 @@ class Snake extends Phaser.GameObjects.GameObject {
 
     this.scene.physics.add.collider(
       this.head,
-      this.segments.children.entries.slice(1),
+      this.segments.children.entries.slice(2),
       () => {
         this.scene.testFunc2("self", this.player);
       },
       null,
       this
     );
+
+    this.segments.children.entries.forEach((segment) => {
+      console.log(segment.x);
+      console.log(segment.y);
+    });
+
+    debugger;
 
     this.scene.physics.add.collider(
       this.head,
