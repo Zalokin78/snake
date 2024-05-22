@@ -34,7 +34,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     //console.log(this.velMultiplyer);
     //console.log(this.scene.topLayer);
     this.createSnake();
-    //this.createColliders();
+    this.createColliders();
     this.keyboardMovement();
 
     /* this.scene.input.keyboard.on("keydown-UP", () => {});
@@ -109,7 +109,17 @@ class Snake extends Phaser.GameObjects.GameObject {
 
     this.head = this.segments.children.entries[0];
 
+    this.head.test = "blah";
+
+    this.segments.children.entries[0].body.angle = this.angle;
+
     this.head.angle = this.segments.children.entries[0].body.angle;
+
+    //this.head.angle = this.angle;
+
+    console.log(this.segments.children.entries[0].body.angle);
+
+    debugger;
 
     this.segments.children.entries.forEach((segment) => {
       segment.body.angle = this.angle;
@@ -151,11 +161,13 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.segmentsRecord.pop();
 
     this.segments.children.entries.forEach((segment) => {
+      if (segment !== this.head) {
+        segment.x = this.segmentsRecord[this.offset].x;
+        segment.y = this.segmentsRecord[this.offset].y;
+        segment.angle = this.segmentsRecord[this.offset].angle;
+        this.offset += this.initOffset;
+      }
       //console.log(segment.x);
-      segment.x = this.segmentsRecord[this.offset].x;
-      segment.y = this.segmentsRecord[this.offset].y;
-      segment.angle = this.segmentsRecord[this.offset].angle;
-      this.offset += this.initOffset;
     });
     this.lastOffset = this.offset;
     this.offset = this.initOffset;
