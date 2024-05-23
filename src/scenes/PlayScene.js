@@ -26,6 +26,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       plyr2: ["A", "D"],
       // type: ["keyup", "keydown"],
     };
+    this.initState = { xPos: [100, 300], yPos: [400, 500], angle: [180, 90] };
 
     //this.playerTint = "ff0000";
   }
@@ -345,7 +346,8 @@ class PlayScene extends Phaser.Scene {
     this.apple = this.physics.add
       .sprite(this.apple.x, this.apple.y, "apple")
       .setOrigin(0.5, 0.5)
-      .setPushable(false);
+      .setPushable(false)
+      .setImmovable(true);
 
     //this.add.existing(this.snakeA);
 
@@ -409,6 +411,8 @@ class PlayScene extends Phaser.Scene {
     //console.log(this.game.loop.time);
   }
 
+  init([snake0, snake1]) {}
+
   generateApple() {
     do {
       let rndWidth = Math.floor(Phaser.Math.Between(0, this.config.width));
@@ -443,7 +447,9 @@ class PlayScene extends Phaser.Scene {
     } else if (collType == "tile") {
       alert(`Player ${player} collided with a tile`);
     } else if (collType == "other") {
-      alert(`Player ${player} collided with other player`);
+      alert(
+        `Player ${player + 1} collided with player ${(player == 0 ? 1 : 0) + 1}`
+      );
     }
 
     //console.log("RESTART II!!!!!");
