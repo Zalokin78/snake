@@ -26,7 +26,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       plyr2: ["A", "D"],
       // type: ["keyup", "keydown"],
     };
-    this.initState = { xPos: [100, 300], yPos: [400, 500], angle: [180, 90] };
+    // this.initState = { xPos: [100, 300], yPos: [400, 500], angle: [180, 90] };
 
     //this.playerTint = "ff0000";
   }
@@ -306,6 +306,10 @@ class PlayScene extends Phaser.Scene {
     this.noOfPlayers = 2;
     this.apple = {};
     this.snakes = [];
+    this.initState = [
+      { xPos: 100, yPos: 400, angle: 180 },
+      { xPos: 300, yPos: 500, angle: 90 },
+    ];
   }
   preload() {
     this.load.image("terrain", "assets/Tiled/terrain_atlas.png");
@@ -325,7 +329,8 @@ class PlayScene extends Phaser.Scene {
 
     //this.initialise();
     // this.snakes.push()
-    for (let i = 0; i < this.noOfPlayers; i++) {
+    this.initSnakes();
+    /* for (let i = 0; i < this.noOfPlayers; i++) {
       console.log(i);
       this.snake = new Snake(this);
       this.snakes.push(this.snake);
@@ -340,7 +345,7 @@ class PlayScene extends Phaser.Scene {
       this.snakes[1].xPos = 400;
       this.snakes[1].yPos = 400;
       //this.snakes[1].player = 2;
-    }
+    } */
 
     this.generateApple();
     this.apple = this.physics.add
@@ -411,7 +416,30 @@ class PlayScene extends Phaser.Scene {
     //console.log(this.game.loop.time);
   }
 
-  init([snake0, snake1]) {}
+  initSnakes() {
+    for (let i = 0; i < this.noOfPlayers; i++) {
+      console.log(i);
+      this.snake = new Snake(this);
+      this.snakes.push(this.snake);
+      this.snakes[i].player = i;
+      //console.log(this.snakes[i]);
+    }
+
+    /* this.snakes[0].xPos = 200;
+    this.snakes[0].yPos = 200;
+    //this.snakes[0].player = 1;
+    if (this.noOfPlayers > 1) {
+      this.snakes[1].xPos = 400;
+      this.snakes[1].yPos = 400;
+      //this.snakes[1].player = 2;
+    } */
+
+    for (let i = 0; i < this.noOfPlayers; i++) {
+      this.snakes[i].xPos = this.initState[i].xPos;
+      this.snakes[i].yPos = this.initState[i].yPos;
+      this.snakes[i].angle = this.initState[i].angle;
+    }
+  }
 
   generateApple() {
     do {
@@ -450,6 +478,10 @@ class PlayScene extends Phaser.Scene {
       alert(
         `Player ${player + 1} collided with player ${(player == 0 ? 1 : 0) + 1}`
       );
+      /* this.snakes.forEach((snake) => {
+        snake.destroy();
+      });
+      this.initSnakes(); */
     }
 
     //console.log("RESTART II!!!!!");
