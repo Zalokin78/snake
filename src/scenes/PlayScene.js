@@ -189,6 +189,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
  */
   createColliders() {
+    this.colliders = [];
     /* console.log(this.scene.snakes[0].collisionObjs[0]);
     console.log(this.collisionBody.children.entries);
     console.log(this.head); */
@@ -208,57 +209,67 @@ class Snake extends Phaser.GameObjects.GameObject {
       this
     ); */
 
-    this.scene.physics.add.collider(
-      this.head,
-      this.segments.children.entries.slice(2),
-      () => {
-        this.scene.testFunc2("self", this.player);
-      },
-      null,
-      this
+    this.colliders.push(
+      this.scene.physics.add.collider(
+        this.head,
+        this.segments.children.entries.slice(2),
+        () => {
+          this.scene.testFunc2("self", this.player);
+        },
+        null,
+        this
+      )
     );
 
-    this.segments.children.entries.forEach((segment) => {
+    /* this.segments.children.entries.forEach((segment) => {
       console.log(segment.x);
       console.log(segment.y);
-    });
+    }); */
 
-    debugger;
+    //debugger;
 
-    this.scene.physics.add.collider(
-      this.head,
-      this.scene.snakes[this.player == 0 ? 1 : 0].segments.children.entries,
-      //this.scene.snakes[this.player == 0 ? 1 : 0].collisionObjs,
-      () => {
-        this.scene.testFunc2("other", this.player), null, this;
-      }
+    this.colliders.push(
+      this.scene.physics.add.collider(
+        this.head,
+        this.scene.snakes[this.player == 0 ? 1 : 0].segments.children.entries,
+        //this.scene.snakes[this.player == 0 ? 1 : 0].collisionObjs,
+        () => {
+          this.scene.testFunc2("other", this.player), null, this;
+        }
+      )
     );
-    console.log(this.scene.snakes[0]);
+    //console.log(this.scene.snakes[0]);
 
-    this.scene.physics.add.collider(
-      this.head,
-      this.scene.topLayer,
-      () => {
-        // this.scene.testFunc2("tile");
-        this.scene.testFunc2("tile", this.player);
-      },
-      null,
-      this
+    this.colliders.push(
+      this.scene.physics.add.collider(
+        this.head,
+        this.scene.topLayer,
+        () => {
+          // this.scene.testFunc2("tile");
+          this.scene.testFunc2("tile", this.player);
+        },
+        null,
+        this
+      )
     );
 
-    this.scene.physics.add.collider(
-      this.head,
-      this.scene.apple,
-      () => {
-        // this.scene.eat(this);
-        this.eat(this);
-      },
-      null,
-      this
+    this.colliders.push(
+      this.scene.physics.add.collider(
+        this.head,
+        this.scene.apple,
+        () => {
+          // this.scene.eat(this);
+          this.eat(this);
+        },
+        null,
+        this
+      )
     );
+    console.log(this.scene.apple);
   }
 
   eat() {
+    debugger;
     this.scene.generateApple();
     let segmentRef = this.lastOffset + this.initOffset;
     let segment = this.segments
@@ -310,6 +321,7 @@ class PlayScene extends Phaser.Scene {
       { xPos: 100, yPos: 400, angle: 180 },
       { xPos: 300, yPos: 500, angle: 90 },
     ];
+    this.collision = false;
   }
   preload() {
     this.load.image("terrain", "assets/Tiled/terrain_atlas.png");
@@ -329,7 +341,7 @@ class PlayScene extends Phaser.Scene {
 
     //this.initialise();
     // this.snakes.push()
-    this.initSnakes();
+
     /* for (let i = 0; i < this.noOfPlayers; i++) {
       console.log(i);
       this.snake = new Snake(this);
@@ -354,9 +366,11 @@ class PlayScene extends Phaser.Scene {
       .setPushable(false)
       .setImmovable(true);
 
+    this.initSnakes();
+
     //this.add.existing(this.snakeA);
 
-    this.snakes.forEach((snake) => {
+    /* this.snakes.forEach((snake) => {
       snake.create();
     });
 
@@ -364,7 +378,7 @@ class PlayScene extends Phaser.Scene {
     this.snakes[0].segments.children.entries.forEach((segment) => {
       segment.setTint(0xff0000);
       //console.log(segment);
-    });
+    }); */
 
     /* this.testSprite = this.physics.add.sprite(200, 200, "segment");
     console.log(this.topLayer);
@@ -383,6 +397,7 @@ class PlayScene extends Phaser.Scene {
     }); */
     //console.log(this.snakes[0].body.set);
     //this.snakes[0].snake
+    console.log(this.apple);
   }
 
   update(/* time, delta */) {
@@ -417,6 +432,7 @@ class PlayScene extends Phaser.Scene {
   }
 
   initSnakes() {
+    //debugger;
     for (let i = 0; i < this.noOfPlayers; i++) {
       console.log(i);
       this.snake = new Snake(this);
@@ -425,20 +441,20 @@ class PlayScene extends Phaser.Scene {
       //console.log(this.snakes[i]);
     }
 
-    /* this.snakes[0].xPos = 200;
-    this.snakes[0].yPos = 200;
-    //this.snakes[0].player = 1;
-    if (this.noOfPlayers > 1) {
-      this.snakes[1].xPos = 400;
-      this.snakes[1].yPos = 400;
-      //this.snakes[1].player = 2;
-    } */
-
     for (let i = 0; i < this.noOfPlayers; i++) {
       this.snakes[i].xPos = this.initState[i].xPos;
       this.snakes[i].yPos = this.initState[i].yPos;
       this.snakes[i].angle = this.initState[i].angle;
     }
+    this.snakes.forEach((snake) => {
+      snake.create();
+    });
+
+    console.log(this.snakes[0].segments.children.entries);
+    this.snakes[0].segments.children.entries.forEach((segment) => {
+      segment.setTint(0xff0000);
+      //console.log(segment);
+    });
   }
 
   generateApple() {
@@ -478,11 +494,14 @@ class PlayScene extends Phaser.Scene {
       alert(
         `Player ${player + 1} collided with player ${(player == 0 ? 1 : 0) + 1}`
       );
-      /* this.snakes.forEach((snake) => {
-        snake.destroy();
-      });
-      this.initSnakes(); */
     }
+    //debugger;
+    this.snakes.forEach((snake) => {
+      //debugger;
+      //snake.destroy(true);
+    });
+    //debugger;
+    //this.initSnakes();
 
     //console.log("RESTART II!!!!!");
     //alert("Tile collision!!");
