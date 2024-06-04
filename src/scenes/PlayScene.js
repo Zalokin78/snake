@@ -161,18 +161,20 @@ class Snake extends Phaser.GameObjects.GameObject {
       angle: this.head.angle,
     });
     this.segmentsRecord.pop();
+    if (!this.scene.physicsPause) {
+      this.segments.children.entries.forEach((segment) => {
+        if (segment !== this.head) {
+          segment.x = this.segmentsRecord[this.offset].x;
+          segment.y = this.segmentsRecord[this.offset].y;
+          segment.angle = this.segmentsRecord[this.offset].angle;
+          this.offset += this.initOffset;
+        }
+        //console.log(segment.x);
+      });
+      this.lastOffset = this.offset;
+      this.offset = this.initOffset;
+    }
 
-    this.segments.children.entries.forEach((segment) => {
-      if (segment !== this.head) {
-        segment.x = this.segmentsRecord[this.offset].x;
-        segment.y = this.segmentsRecord[this.offset].y;
-        segment.angle = this.segmentsRecord[this.offset].angle;
-        this.offset += this.initOffset;
-      }
-      //console.log(segment.x);
-    });
-    this.lastOffset = this.offset;
-    this.offset = this.initOffset;
     //debugger;
   }
 
@@ -317,6 +319,7 @@ class PlayScene extends Phaser.Scene {
     this.noOfPlayers = 2;
     this.apple = {};
     this.snakes = [];
+    this.physicsPause = false;
     this.initState = [
       { xPos: 100, yPos: 400, angle: 180 },
       { xPos: 300, yPos: 500, angle: 90 },
@@ -486,8 +489,10 @@ class PlayScene extends Phaser.Scene {
 
   testFunc2(collType, player) {
     console.log(collType);
+    this.physicsPause = true;
+    this.physics.pause();
     //debugger;
-    if (collType == "self") {
+    /* if (collType == "self") {
       alert(`Player ${player} collided with itself`);
     } else if (collType == "tile") {
       alert(`Player ${player} collided with a tile`);
@@ -495,8 +500,9 @@ class PlayScene extends Phaser.Scene {
       alert(
         `Player ${player + 1} collided with player ${(player == 0 ? 1 : 0) + 1}`
       );
-    }
+    } */
     console.log(this.colliders);
+
     //debugger;
     this.snakes.forEach((snake) => {
       //debugger;
