@@ -29,8 +29,10 @@ class Snake extends Phaser.GameObjects.GameObject {
 
   create() {
     this.createSnake();
-    this.createColliders();
-    this.keyboardMovement();
+    if (this.scene.generateSnake) {
+      this.createColliders();
+      this.keyboardMovement();
+    }
 
     /* this.scene.input.keyboard.on("keydown-UP", () => {});
 
@@ -227,6 +229,7 @@ class PlayScene extends Phaser.Scene {
     ];
     this.collision = false;
     this.colliders = [];
+    this.generateSnake = true;
   }
   preload() {
     this.load.image("terrain", "assets/Tiled/terrain_atlas.png");
@@ -264,13 +267,17 @@ class PlayScene extends Phaser.Scene {
   }
 
   initSnakes() {
-    for (let i = 0; i < this.noOfPlayers; i++) {
-      console.log(i);
-      this.snake = new Snake(this);
-      this.snakes.push(this.snake);
-      this.snakes[i].player = i;
-      //console.log(this.snakes[i]);
+    if (this.generateSnake) {
+      for (let i = 0; i < this.noOfPlayers; i++) {
+        console.log(i);
+        this.snake = new Snake(this);
+        this.snakes.push(this.snake);
+        this.snakes[i].player = i;
+        //console.log(this.snakes[i]);
+      }
     }
+
+    this.generateSnake = false;
 
     for (let i = 0; i < this.noOfPlayers; i++) {
       this.snakes[i].xPos = this.initState[i].xPos;
@@ -329,7 +336,7 @@ class PlayScene extends Phaser.Scene {
     /* this.snakes.forEach((snake) => {      
       //snake.destroy(true);
     });  */
-    //this.initSnakes();
+    this.initSnakes();
   }
 }
 
