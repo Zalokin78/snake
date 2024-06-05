@@ -33,6 +33,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.createColliders();
       this.keyboardMovement();
     }
+    debugger;
 
     /* this.scene.input.keyboard.on("keydown-UP", () => {});
 
@@ -266,6 +267,8 @@ class PlayScene extends Phaser.Scene {
     //console.log(this.game.loop.time);
   }
 
+  makeSnakes() {}
+
   initSnakes() {
     if (this.generateSnake) {
       for (let i = 0; i < this.noOfPlayers; i++) {
@@ -277,7 +280,7 @@ class PlayScene extends Phaser.Scene {
       }
     }
 
-    this.generateSnake = false;
+    //this.generateSnake = false;
 
     for (let i = 0; i < this.noOfPlayers; i++) {
       this.snakes[i].xPos = this.initState[i].xPos;
