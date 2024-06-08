@@ -282,14 +282,15 @@ class PlayScene extends Phaser.Scene {
 
     //this.generateSnake = false;
     if (this.generateSnake) {
-      for (let i = 0; i < this.noOfPlayers; i++) {
+      for (let player = 0; player < this.noOfPlayers; player++) {
         this.snake = new Snake(this);
         this.snakes.push(this.snake);
         /* this.snakes[i].xPos = this.initState[i].xPos;
         this.snakes[i].yPos = this.initState[i].yPos;
         this.snakes[i].angle = this.initState[i].angle;
         this.snakes[i].player = i; */
-        debugger;
+        this.initSnake(player);
+        //debugger;
       }
     }
     this.snakes.forEach((snake) => {
@@ -301,11 +302,12 @@ class PlayScene extends Phaser.Scene {
     });
   }
 
-  initSnake() {
-    this.snakes[i].xPos = this.initState[i].xPos;
-    this.snakes[i].yPos = this.initState[i].yPos;
-    this.snakes[i].angle = this.initState[i].angle;
-    this.snakes[i].player = i;
+  initSnake(player) {
+    this.snakes[player].xPos = this.initState[player].xPos;
+    this.snakes[player].yPos = this.initState[player].yPos;
+    this.snakes[player].angle = this.initState[player].angle;
+    this.snakes[player].player = player;
+    debugger;
   }
 
   generateApple() {
@@ -351,7 +353,11 @@ class PlayScene extends Phaser.Scene {
     /* this.snakes.forEach((snake) => {      
       //snake.destroy(true);
     });  */
-    this.makeSnakes();
+    for (let player = 0; player < this.noOfPlayers; player++) {
+      this.initSnake(player);
+      debugger;
+    }
+    //this.makeSnakes();
   }
 }
 
