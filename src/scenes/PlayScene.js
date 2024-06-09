@@ -28,6 +28,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   create() {
+    console.log(this.initState);
     this.createSnake();
     if (this.scene.generateSnake) {
       this.createColliders();
@@ -40,6 +41,39 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.spacebar = this.scene.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
     ); */
+  }
+
+  initSnakeInstance() {
+    this.xPos = this.initState.xPos;
+    this.yPos = this.initState.yPos;
+    this.angle = this.initState.angle;
+    this.player = this.initState.player;
+
+    for (let i = 0; i < this.segmentsRecordSize; i++) {
+      this.xPos -= Math.cos(Math.PI * (this.angle / 180)) * this.velMultiplyer;
+      this.yPos -= Math.sin(Math.PI * (this.angle / 180)) * this.velMultiplyer;
+
+      this.segmentsRecord.push({
+        x: this.xPos,
+        y: this.yPos,
+        angle: this.angle,
+        isHead: i == 0 ? true : false,
+      });
+    }
+
+    //note that 1st one of the array is head, so the offset is applied to all but the head hence the following ternary operator.
+    for (let i = 0; i < this.snakeSize; i++) {
+      this.segments
+        .create(
+          this.segmentsRecord[i == 0 ? 0 : this.offset].x,
+          this.segmentsRecord[i == 0 ? 0 : this.offset].y,
+          "segment"
+        )
+        .setOrigin(0.5);
+
+      this.offset += this.initOffset;
+    }
+    //debugger;
   }
 
   update() {
@@ -66,11 +100,11 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   createSnake() {
-    this.angle = 90;
+    //this.angle = 90;
 
     //this.head.setTint(0xff0000);
 
-    for (let i = 0; i < this.segmentsRecordSize; i++) {
+    /* for (let i = 0; i < this.segmentsRecordSize; i++) {
       this.xPos -= Math.cos(Math.PI * (this.angle / 180)) * this.velMultiplyer;
       this.yPos -= Math.sin(Math.PI * (this.angle / 180)) * this.velMultiplyer;
 
@@ -93,7 +127,7 @@ class Snake extends Phaser.GameObjects.GameObject {
         .setOrigin(0.5);
 
       this.offset += this.initOffset;
-    }
+    } */
 
     this.head = this.segments.children.entries[0];
 
@@ -225,13 +259,13 @@ class PlayScene extends Phaser.Scene {
     this.snakes = [];
     this.physicsPause = false;
     this.initState = [
-      { xPos: 100, yPos: 400, angle: 180 },
-      { xPos: 300, yPos: 500, angle: 90 },
+      { xPos: 100, yPos: 400, angle: 90, player: 0 },
+      { xPos: 300, yPos: 500, angle: 90, player: 1 },
     ];
     this.collision = false;
     this.colliders = [];
     this.generateSnake = true;
-    this.snake = {};
+    //this.snake = {};
   }
   preload() {
     this.load.image("terrain", "assets/Tiled/terrain_atlas.png");
@@ -285,15 +319,19 @@ class PlayScene extends Phaser.Scene {
       for (let player = 0; player < this.noOfPlayers; player++) {
         this.snake = new Snake(this);
         this.snakes.push(this.snake);
+        this.snake.initState = this.initState[player];
+        debugger;
         /* this.snakes[i].xPos = this.initState[i].xPos;
         this.snakes[i].yPos = this.initState[i].yPos;
         this.snakes[i].angle = this.initState[i].angle;
         this.snakes[i].player = i; */
-        this.initSnake(player);
+        //this.initSnake(player);
         //debugger;
       }
     }
+
     this.snakes.forEach((snake) => {
+      snake.initSnakeInstance();
       snake.create();
     });
 
@@ -302,13 +340,13 @@ class PlayScene extends Phaser.Scene {
     });
   }
 
-  initSnake(player) {
+  /* initSnake(player) {
     this.snakes[player].xPos = this.initState[player].xPos;
     this.snakes[player].yPos = this.initState[player].yPos;
     this.snakes[player].angle = this.initState[player].angle;
     this.snakes[player].player = player;
     debugger;
-  }
+  } */
 
   generateApple() {
     do {
@@ -350,13 +388,13 @@ class PlayScene extends Phaser.Scene {
         `Player ${player + 1} collided with player ${(player == 0 ? 1 : 0) + 1}`
       );
     }
-    /* this.snakes.forEach((snake) => {      
-      //snake.destroy(true);
-    });  */
-    for (let player = 0; player < this.noOfPlayers; player++) {
+    this.snakes.forEach((snake) => {
+      snake.initSnakeInstance();
+    });
+    /* for (let player = 0; player < this.noOfPlayers; player++) {
       this.initSnake(player);
       debugger;
-    }
+    } */
     //this.makeSnakes();
   }
 }
