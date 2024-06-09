@@ -73,6 +73,7 @@ class Snake extends Phaser.GameObjects.GameObject {
 
       this.offset += this.initOffset;
     }
+    this.offset = this.initOffset;
     //debugger;
   }
 
@@ -139,8 +140,6 @@ class Snake extends Phaser.GameObjects.GameObject {
       segment.body.angle = this.head.angle;
       segment.body.setImmovable(true);
     });
-
-    this.offset = this.initOffset;
   }
 
   snakeMovement() {
