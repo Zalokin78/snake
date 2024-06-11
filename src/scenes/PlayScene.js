@@ -245,6 +245,10 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   eat() {
+    //for (let player = 0; player < this.noOfPlayers; player++) {
+    //this.initSnakeInstance();
+    //debugger;
+    //}
     //debugger;
     this.scene.generateApple();
     let segmentRef = this.lastOffset + this.initOffset;
@@ -373,6 +377,11 @@ class PlayScene extends Phaser.Scene {
   } */
 
   generateApple() {
+    this.collision = true;
+    this.snakes.forEach((snake) => {
+      snake.initSnakeInstance();
+      //debugger;
+    });
     do {
       let rndWidth = Math.floor(Phaser.Math.Between(0, this.config.width));
       let rndHeight = Math.floor(Phaser.Math.Between(0, this.config.height));
@@ -401,6 +410,9 @@ class PlayScene extends Phaser.Scene {
   testFunc2(collType, player) {
     this.collision = true;
     this.snakes.forEach((snake) => {
+      snake.segments.children.entries.forEach((segment) => {
+        segment.disableBody(false, false);
+      });
       snake.initSnakeInstance();
       //debugger;
     });
@@ -419,9 +431,11 @@ class PlayScene extends Phaser.Scene {
     }
 
     /* for (let player = 0; player < this.noOfPlayers; player++) {
-      this.initSnake(player);
+      console.log(this.snakes);
       debugger;
+      this.snakes[player].initSnake();
     } */
+    //this.initSnakeInstance();
     //this.makeSnakes();
   }
 }
