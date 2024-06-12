@@ -61,6 +61,8 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.yPos = this.initState.yPos;
     this.angle = this.initState.angle;
     this.player = this.initState.player;
+
+    //this.scene.collision = true;
     //debugger;
 
     for (let i = 0; i < this.segmentsRecordSize; i++) {
@@ -105,8 +107,9 @@ class Snake extends Phaser.GameObjects.GameObject {
     }
     this.offset = this.initOffset;
     if (this.scene.collision) {
-      debugger;
+      //debugger;
     }
+    debugger;
   }
 
   update() {
@@ -167,6 +170,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.velocity,
       this.head.body.velocity
     );
+    if (this.collision) debugger;
 
     this.segmentsRecord.splice(1, 0, {
       x: this.head.x,
@@ -174,7 +178,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       angle: this.head.angle,
     });
     if (this.scene.collision) {
-      debugger;
+      //debugger;
     }
     this.segmentsRecord.pop();
     if (!this.scene.physicsPause) {
@@ -190,7 +194,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.offset = this.initOffset;
     }
     if (this.scene.collision) {
-      debugger;
+      //debugger;
     }
   }
 
@@ -378,10 +382,7 @@ class PlayScene extends Phaser.Scene {
 
   generateApple() {
     this.collision = true;
-    this.snakes.forEach((snake) => {
-      snake.initSnakeInstance();
-      //debugger;
-    });
+
     do {
       let rndWidth = Math.floor(Phaser.Math.Between(0, this.config.width));
       let rndHeight = Math.floor(Phaser.Math.Between(0, this.config.height));
@@ -408,26 +409,43 @@ class PlayScene extends Phaser.Scene {
   }
 
   testFunc2(collType, player) {
-    this.collision = true;
-    this.snakes.forEach((snake) => {
-      snake.segments.children.entries.forEach((segment) => {
-        segment.disableBody(false, false);
-      });
-      snake.initSnakeInstance();
-      //debugger;
-    });
-    console.log(collType);
-    this.physicsPause = true;
-    this.physics.pause();
+    //this.collision = true;
+    if (this.collision) {
+      console.log(collType);
+      // this.physicsPause = true;
+      // this.physics.pause();
 
-    if (collType == "self") {
-      alert(`Player ${player} collided with itself`);
-    } else if (collType == "tile") {
-      alert(`Player ${player} collided with a tile`);
-    } else if (collType == "other") {
-      alert(
-        `Player ${player + 1} collided with player ${(player == 0 ? 1 : 0) + 1}`
-      );
+      if (collType == "self") {
+        alert(`Player ${player} collided with itself`);
+      } else if (collType == "tile") {
+        alert(`Player ${player} collided with a tile`);
+      } else if (collType == "other") {
+        alert(
+          `Player ${player + 1} collided with player ${
+            (player == 0 ? 1 : 0) + 1
+          }`
+        );
+      }
+      //debugger;
+      this.collision = false;
+      this.snakes.forEach((snake) => {
+        /* snake.segments.children.entries.forEach((segment) => {
+            segment.disableBody(false, false);
+          }); */
+        snake.initSnakeInstance();
+        snake.head.angle = 90;
+
+        /* this.snakes.forEach((snake) => {
+          snake.update();
+        }); */
+        console.log(snake.head.angle);
+        console.log(this.collision);
+        debugger;
+
+        //this.input.keyboard.resetKeys();
+      });
+      this.collision = true;
+      debugger;
     }
 
     /* for (let player = 0; player < this.noOfPlayers; player++) {
@@ -437,6 +455,7 @@ class PlayScene extends Phaser.Scene {
     } */
     //this.initSnakeInstance();
     //this.makeSnakes();
+    //return false;
   }
 }
 
