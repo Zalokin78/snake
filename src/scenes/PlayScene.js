@@ -4,7 +4,8 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.snakeSize = 10;
+    this.initSnakeSize = 15;
+    this.snakeSize = this.initSnakeSize;
     this.segments = this.scene.physics.add.group();
     this.collisionBody = this.scene.physics.add.group();
     this.segmentsRecord = [];
@@ -26,6 +27,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       plyr1: ["LEFT", "RIGHT"],
       plyr2: ["A", "D"],
     };
+    this.testKeys = { removeSegment: "Q" };
   }
 
   create() {
@@ -52,11 +54,20 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.spacebar = this.scene.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
     ); */
+    //this.snakeSize = this.segments.children.entries.length;
+
     this.snakeCreated = true;
+    debugger;
   }
 
   initSnakeInstance() {
     this.segmentsRecord = [];
+    //this.snakeSize = this.initSnakeSize;
+    //this.segments.children.entries.forEach((segment) => {});
+
+    //debugger;
+    this.scene.input.keyboard.resetKeys();
+
     this.xPos = this.initState.xPos;
     this.yPos = this.initState.yPos;
     this.angle = this.initState.angle;
@@ -79,7 +90,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     }
 
     //note that 1st one of the array is head, so the offset is applied to all but the head hence the following ternary operator.
-    for (let i = 0; i < this.snakeSize; i++) {
+    for (let i = 0; i < this.initSnakeSize; i++) {
       if (!this.snakeCreated) {
         this.segments
           .create(
@@ -89,10 +100,21 @@ class Snake extends Phaser.GameObjects.GameObject {
           )
           .setOrigin(0.5);
       } else {
+        //reset snake location to start location and angle
         this.segments.children.entries[i].x =
           this.segmentsRecord[i == 0 ? 0 : this.offset].x;
         this.segments.children.entries[i].y =
           this.segmentsRecord[i == 0 ? 0 : this.offset].y;
+
+        this.head.angle = this.initState.angle;
+        debugger;
+        //destroy all segments to match initSnakeSize
+        while (this.segments.children.entries.length > this.initSnakeSize) {
+          debugger;
+          this.segments.children.entries[
+            this.segments.children.entries.length - 1
+          ].destroy();
+        }
       }
       //console.log(this.segments.children.entries.length);
       //debugger;
@@ -109,7 +131,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     if (this.scene.collision) {
       //debugger;
     }
-    debugger;
+    //debugger;
   }
 
   update() {
@@ -133,6 +155,18 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.scene.input.keyboard.on(`keyup-${playerKeys[1]}`, () => {
       this.head.setAngularVelocity(0);
     });
+    /* this.scene.input.keyboard.on(`keydown-${playerKeys[0]}`, () => {
+      this.head.setAngularVelocity(0);
+    }); */
+    //testing area
+    this.scene.input.keyboard.on(
+      `keydown-${this.testKeys.removeSegment}`,
+      () => {
+        this.segments.children.entries[
+          this.segments.children.entries.length - 1
+        ].destroy();
+      }
+    );
   }
 
   createSnake() {
@@ -170,7 +204,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.velocity,
       this.head.body.velocity
     );
-    if (this.collision) debugger;
+    //if (this.collision) debugger;
 
     this.segmentsRecord.splice(1, 0, {
       x: this.head.x,
@@ -249,6 +283,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   eat() {
+    console.log(this.snakeSize);
     //for (let player = 0; player < this.noOfPlayers; player++) {
     //this.initSnakeInstance();
     //debugger;
@@ -329,6 +364,7 @@ class PlayScene extends Phaser.Scene {
     this.snakes.forEach((snake) => {
       snake.update();
     });
+    this.collision = true;
 
     //console.log(this.game.loop.actualFps);
     //console.log(this.game.loop.time);
@@ -440,12 +476,12 @@ class PlayScene extends Phaser.Scene {
         }); */
         console.log(snake.head.angle);
         console.log(this.collision);
-        debugger;
+        //debugger;
 
         //this.input.keyboard.resetKeys();
       });
-      this.collision = true;
-      debugger;
+
+      //debugger;
     }
 
     /* for (let player = 0; player < this.noOfPlayers; player++) {
