@@ -61,12 +61,13 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   initSnakeInstance() {
+    console.log(Phaser.Input.Keyboard.JustDown);
     this.segmentsRecord = [];
     //this.snakeSize = this.initSnakeSize;
     //this.segments.children.entries.forEach((segment) => {});
 
     //debugger;
-    this.scene.input.keyboard.resetKeys();
+    //this.scene.input.keyboard.resetKeys(true);
 
     this.xPos = this.initState.xPos;
     this.yPos = this.initState.yPos;
@@ -135,6 +136,9 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   update() {
+    this.scene.input.keyboard.on(event, function () {
+      console.log(event);
+    });
     this.worldBoundaryBehaviour();
     this.snakeMovement();
   }
@@ -143,6 +147,9 @@ class Snake extends Phaser.GameObjects.GameObject {
     console.log(Object.values(this.keys));
 
     let playerKeys = this.keys[Object.keys(this.keys)[this.player]];
+    console.log(this.initState.player);
+    console.log(this.player);
+    console.log(playerKeys);
     this.scene.input.keyboard.on(`keydown-${playerKeys[0]}`, () => {
       this.head.setAngularVelocity(-this.angularVelocity);
     });
