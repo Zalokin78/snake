@@ -108,6 +108,7 @@ class Snake extends Phaser.GameObjects.GameObject {
           this.segmentsRecord[i == 0 ? 0 : this.offset].y;
 
         this.head.angle = this.initState.angle;
+        //this.head.setAngularVelocity(0);
         debugger;
         //destroy all segments to match initSnakeSize
         while (this.segments.children.entries.length > this.initSnakeSize) {
@@ -117,6 +118,7 @@ class Snake extends Phaser.GameObjects.GameObject {
           ].destroy();
         }
       }
+      console.log(this.head);
       //console.log(this.segments.children.entries.length);
       //debugger;
 
@@ -128,6 +130,7 @@ class Snake extends Phaser.GameObjects.GameObject {
         this.offset += this.initOffset;
       }
     }
+
     this.offset = this.initOffset;
     if (this.scene.collision) {
       //debugger;
