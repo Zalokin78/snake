@@ -19,6 +19,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.offset = this.initOffset;
     this.segmentsRecordSize = 500;
     this.collision = false;
+    this.collisionType = "";
     this.lastOffset = null;
     this.angularVelocity = 300;
     this.velMultiplyer = 3;
@@ -86,7 +87,7 @@ class Snake extends Phaser.GameObjects.GameObject {
         x: this.xPos,
         y: this.yPos,
         angle: this.angle,
-        isHead: i == 0 ? true : false,
+        //isHead: i == 0 ? true : false,
       });
     }
 
@@ -108,7 +109,7 @@ class Snake extends Phaser.GameObjects.GameObject {
           this.segmentsRecord[i == 0 ? 0 : this.offset].y;
 
         this.head.angle = this.initState.angle;
-        //this.head.setAngularVelocity(0);
+        this.head.setAngularVelocity(0);
         debugger;
         //destroy all segments to match initSnakeSize
         while (this.segments.children.entries.length > this.initSnakeSize) {
@@ -144,6 +145,9 @@ class Snake extends Phaser.GameObjects.GameObject {
     });
     this.worldBoundaryBehaviour();
     this.snakeMovement();
+    if (this.scene.collision) {
+      this.testFunc2(this.collisionType, this.player);
+    }
   }
 
   keyboardMovement() {
@@ -248,7 +252,9 @@ class Snake extends Phaser.GameObjects.GameObject {
         this.head,
         this.segments.children.entries.slice(2),
         () => {
-          this.scene.testFunc2("self", this.player);
+          this.collision = true;
+          this.collisionType = "self";
+          // this.scene.testFunc2("self", this.player);
         },
         null,
         this
@@ -261,7 +267,9 @@ class Snake extends Phaser.GameObjects.GameObject {
         this.scene.snakes[this.player == 0 ? 1 : 0].segments.children.entries,
         //this.scene.snakes[this.player == 0 ? 1 : 0].collisionObjs,
         () => {
-          this.scene.testFunc2("other", this.player), null, this;
+          this.collision = true;
+          this.collisionType = "other";
+          //this.testFunc2("other", this.player), null, this;
         }
       )
     );
@@ -271,7 +279,9 @@ class Snake extends Phaser.GameObjects.GameObject {
         this.head,
         this.scene.topLayer,
         () => {
-          this.scene.testFunc2("tile", this.player);
+          //this.testFunc2("tile", this.player);
+          this.collision = true;
+          this.collisionType = "tile";
         },
         null,
         this
@@ -290,6 +300,56 @@ class Snake extends Phaser.GameObjects.GameObject {
       )
     );
     console.log(this.scene.apple);
+  }
+
+  testFunc2(collType, player) {
+    //this.collision = true;
+    if (this.scene.collision) {
+      console.log(collType);
+      // this.physicsPause = true;
+      // this.physics.pause();
+
+      if (collType == "self") {
+        alert(`Player ${player} collided with itself`);
+      } else if (collType == "tile") {
+        alert(`Player ${player} collided with a tile`);
+      } else if (collType == "other") {
+        alert(
+          `Player ${player + 1} collided with player ${
+            (player == 0 ? 1 : 0) + 1
+          }`
+        );
+      }
+      //debugger;
+      this.scene.collision = false;
+      //this.snakes.forEach((snake) => {
+      /* snake.segments.children.entries.forEach((segment) => {
+            segment.disableBody(false, false);
+          }); */
+      this.initSnakeInstance();
+      this.head.angle = 90;
+
+      /* this.snakes.forEach((snake) => {
+          snake.update();
+        }); */
+      //console.log(snake.head.angle);
+      console.log(this.collision);
+      //debugger;
+
+      //this.input.keyboard.resetKeys();
+      //});
+
+      //debugger;
+    }
+
+    /* for (let player = 0; player < this.noOfPlayers; player++) {
+      console.log(this.snakes);
+      debugger;
+      this.snakes[player].initSnake();
+    } */
+    //this.initSnakeInstance();
+    //this.makeSnakes();
+    //return false;
   }
 
   eat() {
@@ -374,7 +434,7 @@ class PlayScene extends Phaser.Scene {
     this.snakes.forEach((snake) => {
       snake.update();
     });
-    this.collision = true;
+    this.collision = false;
 
     //console.log(this.game.loop.actualFps);
     //console.log(this.game.loop.time);
@@ -454,7 +514,7 @@ class PlayScene extends Phaser.Scene {
     this.topLayer.setCollisionByProperty({ collides: true });
   }
 
-  testFunc2(collType, player) {
+  /* testFunc2(collType, player) {
     //this.collision = true;
     if (this.collision) {
       console.log(collType);
@@ -475,15 +535,12 @@ class PlayScene extends Phaser.Scene {
       //debugger;
       this.collision = false;
       this.snakes.forEach((snake) => {
-        /* snake.segments.children.entries.forEach((segment) => {
-            segment.disableBody(false, false);
-          }); */
+        // snake.segments.children.entries.forEach((segment) => {
+        // segment.disableBody(false, false);
+        // });
         snake.initSnakeInstance();
         snake.head.angle = 90;
 
-        /* this.snakes.forEach((snake) => {
-          snake.update();
-        }); */
         console.log(snake.head.angle);
         console.log(this.collision);
         //debugger;
@@ -494,15 +551,15 @@ class PlayScene extends Phaser.Scene {
       //debugger;
     }
 
-    /* for (let player = 0; player < this.noOfPlayers; player++) {
-      console.log(this.snakes);
-      debugger;
-      this.snakes[player].initSnake();
-    } */
+    // for (let player = 0; player < this.noOfPlayers; player++) {
+      // console.log(this.snakes);
+      // debugger;
+      // this.snakes[player].initSnake();
+    // }
     //this.initSnakeInstance();
     //this.makeSnakes();
     //return false;
-  }
+  } */
 }
 
 export default PlayScene;
