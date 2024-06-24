@@ -58,7 +58,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     //this.snakeSize = this.segments.children.entries.length;
 
     this.snakeCreated = true;
-    debugger;
+    //debugger;
   }
 
   initSnakeInstance() {
@@ -109,11 +109,12 @@ class Snake extends Phaser.GameObjects.GameObject {
           this.segmentsRecord[i == 0 ? 0 : this.offset].y;
 
         this.head.angle = this.initState.angle;
+        //this.angularVelocity = 0;
         this.head.setAngularVelocity(0);
-        debugger;
+        //debugger;
         //destroy all segments to match initSnakeSize
         while (this.segments.children.entries.length > this.initSnakeSize) {
-          debugger;
+          //debugger;
           this.segments.children.entries[
             this.segments.children.entries.length - 1
           ].destroy();
@@ -140,12 +141,16 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   update() {
+    console.log(`this.angularVelocity = ${this.angularVelocity}`);
+    console.log(
+      `this.head.SetangularVelocity = ${this.head.setAngularVelocityangularVelocity}`
+    );
     this.scene.input.keyboard.on(event, function () {
       console.log(event);
     });
     this.worldBoundaryBehaviour();
     this.snakeMovement();
-    if (this.scene.collision) {
+    if (this.collision) {
       this.testFunc2(this.collisionType, this.player);
     }
   }
@@ -159,9 +164,11 @@ class Snake extends Phaser.GameObjects.GameObject {
     console.log(playerKeys);
     this.scene.input.keyboard.on(`keydown-${playerKeys[0]}`, () => {
       this.head.setAngularVelocity(-this.angularVelocity);
+      //debugger;
     });
     this.scene.input.keyboard.on(`keyup-${playerKeys[0]}`, () => {
       this.head.setAngularVelocity(0);
+      //debugger;
     });
     this.scene.input.keyboard.on(`keydown-${playerKeys[1]}`, () => {
       this.head.setAngularVelocity(this.angularVelocity);
@@ -303,8 +310,9 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   testFunc2(collType, player) {
+    //debugger;
     //this.collision = true;
-    if (this.scene.collision) {
+    if (this.collision) {
       console.log(collType);
       // this.physicsPause = true;
       // this.physics.pause();
@@ -334,6 +342,8 @@ class Snake extends Phaser.GameObjects.GameObject {
         }); */
       //console.log(snake.head.angle);
       console.log(this.collision);
+
+      this.collision = false;
       //debugger;
 
       //this.input.keyboard.resetKeys();
@@ -434,7 +444,7 @@ class PlayScene extends Phaser.Scene {
     this.snakes.forEach((snake) => {
       snake.update();
     });
-    this.collision = false;
+    //this.collision = false;
 
     //console.log(this.game.loop.actualFps);
     //console.log(this.game.loop.time);
