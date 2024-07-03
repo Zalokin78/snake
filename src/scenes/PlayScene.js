@@ -77,19 +77,11 @@ class Snake extends Phaser.GameObjects.GameObject {
   initSnakeInstance() {
     console.log(Phaser.Input.Keyboard.JustDown);
     this.segmentsRecord = [];
-    //this.snakeSize = this.initSnakeSize;
-    //this.segments.children.entries.forEach((segment) => {});
-
-    //debugger;
-    //this.scene.input.keyboard.resetKeys(true);
 
     this.xPos = this.initState.xPos;
     this.yPos = this.initState.yPos;
     this.angle = this.initState.angle;
     this.player = this.initState.player;
-
-    //this.scene.collision = true;
-    //debugger;
 
     for (let i = 0; i < this.segmentsRecordSize; i++) {
       this.xPos -= Math.cos(Math.PI * (this.angle / 180)) * this.velMultiplyer;
@@ -103,49 +95,7 @@ class Snake extends Phaser.GameObjects.GameObject {
         //isHead: i == 0 ? true : false,
       });
     }
-
-    /* //note that 1st one of the array is head, so the offset is applied to all but the head hence the following ternary operator.
-    for (let i = 0; i < this.initSnakeSize; i++) {
-      if (!this.snakeCreated) {
-        this.segments
-          .create(
-            this.segmentsRecord[i == 0 ? 0 : this.offset].x,
-            this.segmentsRecord[i == 0 ? 0 : this.offset].y,
-            "segment"
-          )
-          .setOrigin(0.5);
-      } else {
-        //reset snake location to start location and angle
-        this.segments.children.entries[i].x =
-          this.segmentsRecord[i == 0 ? 0 : this.offset].x;
-        this.segments.children.entries[i].y =
-          this.segmentsRecord[i == 0 ? 0 : this.offset].y;
-
-        this.head.angle = this.initState.angle;
-        //this.angularVelocity = 0;
-        this.head.setAngularVelocity(0);
-        //debugger;
-        //destroy all segments to match initSnakeSize
-        while (this.segments.children.entries.length > this.initSnakeSize) {
-          //debugger;
-          this.segments.children.entries[
-            this.segments.children.entries.length - 1
-          ].destroy();
-        }
-      }
-      console.log(this.head);
-      //console.log(this.segments.children.entries.length);
-      //debugger;
-
-      // if (this.scene.collision) {
-      //   debugger;
-      // }
-
-      if (i > 0) {
-        this.offset += this.initOffset;
-      }
-    } */
-
+    //***ONLY USED WHEN INITIALISING AN EXISTING GAME***
     //note that 1st one of the array is head, so the offset is applied to all but the head hence the following ternary operator.
     if (this.snakeCreated) {
       for (let i = 0; i < this.initSnakeSize; i++) {
@@ -173,14 +123,6 @@ class Snake extends Phaser.GameObjects.GameObject {
       }
     }
     console.log(this.head);
-    //console.log(this.segments.children.entries.length);
-    //debugger;
-
-    // if (this.scene.collision) {
-    //   debugger;
-    // }
-
-    //debugger;
   }
 
   update() {
