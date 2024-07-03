@@ -49,7 +49,8 @@ class Snake extends Phaser.GameObjects.GameObject {
     //this.createSnake();
     this.head = this.segments.children.entries[0];
 
-    this.segments.children.entries[0].body.angle = this.angle;
+    this.segments.children.entries[0].body.angle = this.initState.angle;
+    debugger;
 
     this.head.angle = this.segments.children.entries[0].body.angle;
 
