@@ -29,6 +29,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       plyr2: ["A", "D"],
     };
     this.testKeys = { removeSegment: "Q" };
+    this.initFlag = false;
   }
 
   create() {
@@ -50,7 +51,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.head = this.segments.children.entries[0];
 
     this.segments.children.entries[0].body.angle = this.initState.angle;
-    debugger;
+    //debugger;
 
     this.head.angle = this.segments.children.entries[0].body.angle;
 
@@ -76,6 +77,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   initSnakeInstance() {
+    this.initFlag = true;
     console.log(Phaser.Input.Keyboard.JustDown);
     this.segmentsRecord = [];
 
@@ -124,6 +126,7 @@ class Snake extends Phaser.GameObjects.GameObject {
       }
     }
     console.log(this.head);
+    debugger;
   }
 
   update() {
@@ -238,6 +241,8 @@ class Snake extends Phaser.GameObjects.GameObject {
     if (this.scene.collision) {
       //debugger;
     }
+    if (this.initFlag) debugger;
+    this.initFlag = false;
   }
 
   createColliders() {
