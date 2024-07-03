@@ -32,6 +32,19 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   create() {
+    for (let i = 0; i < this.initSnakeSize; i++) {
+      this.segments
+        .create(
+          this.segmentsRecord[i == 0 ? 0 : this.offset].x,
+          this.segmentsRecord[i == 0 ? 0 : this.offset].y,
+          "segment"
+        )
+        .setOrigin(0.5);
+
+      if (i > 0) {
+        this.offset += this.initOffset;
+      }
+    }
     console.log(this.initState);
     //this.createSnake();
     this.head = this.segments.children.entries[0];
@@ -134,28 +147,19 @@ class Snake extends Phaser.GameObjects.GameObject {
     } */
 
     //note that 1st one of the array is head, so the offset is applied to all but the head hence the following ternary operator.
-    for (let i = 0; i < this.initSnakeSize; i++) {
-      if (!this.snakeCreated) {
-        this.segments
-          .create(
-            this.segmentsRecord[i == 0 ? 0 : this.offset].x,
-            this.segmentsRecord[i == 0 ? 0 : this.offset].y,
-            "segment"
-          )
-          .setOrigin(0.5);
-      } else {
+    if (this.snakeCreated) {
+      for (let i = 0; i < this.initSnakeSize; i++) {
         //reset snake location to start location and angle
         this.segments.children.entries[i].x =
           this.segmentsRecord[i == 0 ? 0 : this.offset].x;
         this.segments.children.entries[i].y =
           this.segmentsRecord[i == 0 ? 0 : this.offset].y;
-      }
-      if (i > 0) {
-        this.offset += this.initOffset;
-      }
-    }
 
-    if (this.snakeCreated) {
+        if (i > 0) {
+          this.offset += this.initOffset;
+        }
+      }
+
       this.head.angle = this.initState.angle;
       //this.angularVelocity = 0;
       this.head.setAngularVelocity(0);
