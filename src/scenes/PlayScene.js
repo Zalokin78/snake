@@ -4,7 +4,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   constructor(scene) {
     super(scene);
     this.segments = null;
-    this.initSnakeSize = 15;
+    this.initSnakeSize = 1;
     this.snakeSize = this.initSnakeSize;
     this.segments = this.scene.physics.add.group();
     this.collisionBody = this.scene.physics.add.group();
@@ -30,6 +30,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     };
     this.testKeys = { removeSegment: "Q" };
     this.initFlag = false;
+    this.tempAngularVelocity = 0;
   }
 
   create() {
@@ -41,22 +42,28 @@ class Snake extends Phaser.GameObjects.GameObject {
           "segment"
         )
         .setOrigin(0.5);
+      this.segments.children.entries[i].ref = i;
 
       if (i > 0) {
         this.offset += this.initOffset;
       }
     }
+    //debugger;
     console.log(this.initState);
     //this.createSnake();
     this.head = this.segments.children.entries[0];
 
-    this.segments.children.entries[0].body.angle = this.initState.angle;
+    // this.segments.children.entries[0].body.angle = this.initState.angle;
+
     //debugger;
 
-    this.head.angle = this.segments.children.entries[0].body.angle;
+    // this.head.angle = this.segments.children.entries[0].body.angle;
+
+    this.head.angle = this.initState.angle;
+    //debugger;
 
     this.segments.children.entries.forEach((segment) => {
-      segment.body.angle = this.head.angle;
+      //segment.body.angle = this.head.angle;
       segment.body.setImmovable(true);
     });
     if (this.scene.generateSnake) {
@@ -77,6 +84,7 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   initSnakeInstance() {
+    //debugger;
     // this.initFlag = true;
     //console.log(Phaser.Input.Keyboard.JustDown);
     this.segmentsRecord = [];
@@ -85,6 +93,9 @@ class Snake extends Phaser.GameObjects.GameObject {
     this.yPos = this.initState.yPos;
     this.angle = this.initState.angle;
     this.player = this.initState.player;
+
+    //console.log(this.player);
+    //this.angularVelocity = 0;
 
     //if (!this.snakeCreated) {
     for (let i = 0; i < this.segmentsRecordSize; i++) {
@@ -104,6 +115,7 @@ class Snake extends Phaser.GameObjects.GameObject {
     //***ONLY USED WHEN INITIALISING AN EXISTING GAME***
     //note that 1st one of the array is head, so the offset is applied to all but the head hence the following ternary operator.
     if (this.snakeCreated) {
+      //this.head.angularVelocity = 0;
       this.initFlag = true;
       for (let i = 0; i < this.initSnakeSize; i++) {
         //reset snake location to start location and angle
@@ -111,6 +123,7 @@ class Snake extends Phaser.GameObjects.GameObject {
           this.segmentsRecord[i == 0 ? 0 : this.offset].x;
         this.segments.children.entries[i].y =
           this.segmentsRecord[i == 0 ? 0 : this.offset].y;
+        //this.segments.children.entries[i].angle = this.initState.angle;
         //this.segments.children.entries[i].body.angle = 90;
         //debugger;
 
@@ -118,8 +131,12 @@ class Snake extends Phaser.GameObjects.GameObject {
           this.offset += this.initOffset;
         }
       }
+      //debugger;
+
+      this.offset = this.initOffset;
 
       this.head.angle = this.initState.angle;
+      //debugger;
       //this.angularVelocity = 0;
       this.head.setAngularVelocity(0);
       //debugger;
@@ -130,41 +147,94 @@ class Snake extends Phaser.GameObjects.GameObject {
           this.segments.children.entries.length - 1
         ].destroy();
       }
+      // if (this.player == 0) {
+      //   console.log(
+      //     `this.head.body.angularVelocity = ${this.head.body.angularVelocity}`
+      //   );
+      // }
+      // debugger;
+      if (this.initFlag && this.player == 0) {
+        console.log(
+          `this.head.body.angularVelocity = ${this.head.body.angularVelocity}`
+        );
+
+        debugger;
+        //debugger;
+      }
     }
     // if (this.snakeCreated) console.log(this.head.angle);
     // debugger;
   }
 
   update() {
+    /* if (this.initFlag) {
+      this.head.body.angularVelocity = 0;
+      debugger;
+    } */
+    if (this.player == 0 && this.initFlag == false) {
+      //this.head.body.angularVelocity = -300;
+      //this.segments.children.entries.forEach((segment) => {
+      // console.log("segment.ref " + segment.ref);
+      // console.log("segment.angle " + segment.angle);
+      // console.log("segment.body.angle " + segment.body.angle);
+      // console.log("this.head.angle " + this.head.angle);
+      // console.log("this.head.body.angle " + this.head.body.angle);
+      console.log(
+        `this.head.body.angularVelocity = ${this.head.body.angularVelocity}`
+      );
+      //});
+    }
+
+    //debugger;
+
     //console.log(this.angle);
     // console.log(`this.angularVelocity = ${this.angularVelocity}`);
     // console.log(
     //   `this.head.SetangularVelocity = ${this.head.setAngularVelocityangularVelocity}`
     // );
-    this.scene.input.keyboard.on(event, function () {
-      console.log(event);
-    });
+    // this.scene.input.keyboard.on(event, function () {
+    //   console.log(event);
+    // });
     this.worldBoundaryBehaviour();
 
     if (this.collision) {
       this.testFunc2(this.collisionType, this.player);
     }
+    // if (this.initFlag && this.player == 0) {
+    //   console.log(
+    //     `this.head.body.angularVelocity = ${this.head.body.angularVelocity}`
+    //   );
+
+    //   debugger;
+    //   //debugger;
+    // }
     this.snakeMovement();
+    // if (this.initFlag && this.player == 0) {
+    //   console.log(
+    //     `this.head.body.angularVelocity = ${this.head.body.angularVelocity}`
+    //   );
+
+    //   debugger;
+    //   //debugger;
+    // }
   }
 
   keyboardMovement() {
+    //if (this.initFlag) this.head.setAngularVelocity(0);
     console.log(Object.values(this.keys));
 
     let playerKeys = this.keys[Object.keys(this.keys)[this.player]];
-    console.log(this.initState.player);
-    console.log(this.player);
-    console.log(playerKeys);
+    // console.log(this.initState.player);
+    // console.log(this.player);
+    // console.log(playerKeys);
     this.scene.input.keyboard.on(`keydown-${playerKeys[0]}`, () => {
       this.head.setAngularVelocity(-this.angularVelocity);
+
       //debugger;
     });
     this.scene.input.keyboard.on(`keyup-${playerKeys[0]}`, () => {
       this.head.setAngularVelocity(0);
+      //debugger;
       //debugger;
     });
     this.scene.input.keyboard.on(`keydown-${playerKeys[1]}`, () => {
@@ -217,19 +287,87 @@ class Snake extends Phaser.GameObjects.GameObject {
   }
 
   snakeMovement() {
+    if (this.tempAngularVelocity != this.head.body.angularVelocity) {
+      debugger;
+    }
+
+    /* if (this.angularVelocity == 0) {
+      this.checkAngularVelocity = true;
+      if (this.checkAngularVelocity) {
+        debugger;
+        this.checkAngularVelocity = false;
+      }
+    }
+
+    if (this.angularVelocity > 0) {
+      this.checkAngularVelocity = true;
+      if (this.checkAngularVelocity) {
+        debugger;
+        this.checkAngularVelocity = false;
+      }
+    } */
+    /* if (this.angularVelocity == 0) {
+      this.checkAngularVelocity = false;
+    } */
+    if (this.initFlag && this.player == 0) {
+      console.log(
+        `this.head.body.angularVelocity = ${this.head.body.angularVelocity}`
+      );
+
+      debugger;
+      //debugger;
+    }
+    // if (this.initFlag && this.player == 0) {
+    //   console.log(
+    //     `this.head.body.angularVelocity = ${this.head.body.angularVelocity}`
+    //   );
+
+    //   debugger;
+    //   //debugger;
+    // }
+    //debugger;
     //console.log(this.head.angle);
     this.scene.physics.velocityFromAngle(
       this.head.angle,
       this.velocity,
       this.head.body.velocity
     );
-    //if (this.collision) debugger;
+    if (this.initFlag && this.player == 0) {
+      console.log(
+        `this.head.body.angularVelocity = ${this.head.body.angularVelocity}`
+      );
 
+      debugger;
+      //debugger;
+    }
+    if (this.player == 0) {
+      // console.log(this.head.angle);
+      // console.log(this.head.body.angle);
+      // console.log(this.velocity);
+      // console.log(this.head.body.velocity);
+    }
+    //if (this.collision) debugger;
+    if (this.initFlag && this.player == 0) {
+      console.log(
+        `this.head.body.angularVelocity = ${this.head.body.angularVelocity}`
+      );
+
+      debugger;
+      //debugger;
+    }
     this.segmentsRecord.splice(1, 0, {
       x: this.head.x,
       y: this.head.y,
       angle: this.head.angle,
     });
+    if (this.initFlag && this.player == 0) {
+      console.log(
+        `this.head.body.angularVelocity = ${this.head.body.angularVelocity}`
+      );
+
+      debugger;
+      //debugger;
+    }
     if (this.scene.collision) {
       //debugger;
     }
@@ -245,26 +383,53 @@ class Snake extends Phaser.GameObjects.GameObject {
         } */
 
         if (segment !== this.head) {
+          // if (this.initFlag && this.player == 0) {
+          //   console.log(
+          //     `this.head.body.angularVelocity = ${this.head.body.angularVelocity}`
+          //   );
+
+          //   debugger;
+          //   //debugger;
+          // }
           segment.x = this.segmentsRecord[this.offset].x;
           segment.y = this.segmentsRecord[this.offset].y;
           segment.angle = this.segmentsRecord[this.offset].angle;
           this.offset += this.initOffset;
         }
       });
-      if (this.initFlag) {
-        this.segments.children.entries.forEach((segment) => {
-          console.log(segment.body.angle);
-        });
+      if (this.initFlag && this.player == 0) {
+        console.log(
+          `this.head.body.angularVelocity = ${this.head.body.angularVelocity}`
+        );
+
         debugger;
+        //debugger;
       }
-      this.lastOffset = this.offset;
+      // if (this.initFlag) {
+      //   this.segments.children.entries.forEach((segment) => {
+      //     console.log(segment.body.angle);
+      //     debugger;
+      //   });
+      //   //debugger;
+      // }
+      //this.lastOffset = this.offset;
       this.offset = this.initOffset;
     }
-    if (this.scene.collision) {
-      //debugger;
-    }
+    // if (this.scene.collision) {
+    //   //debugger;
+    // }
     // if (this.initFlag) debugger;
     // this.initFlag = false;
+    //debugger;
+    // if (this.initFlag && this.player == 0) {
+    //   console.log(
+    //     `this.head.body.angularVelocity = ${this.head.body.angularVelocity}`
+    //   );
+
+    //   debugger;
+    //   //debugger;
+    // }
+    this.tempAngularVelocity = this.angularVelocity;
   }
 
   createColliders() {
@@ -348,6 +513,14 @@ class Snake extends Phaser.GameObjects.GameObject {
       /* snake.segments.children.entries.forEach((segment) => {
             segment.disableBody(false, false);
           }); */
+      let playerKeys = this.keys[Object.keys(this.keys)[this.player]];
+      console.log(playerKeys);
+      this.scene.input.keyboard.on(`keyup-${playerKeys[0]}`, () => {
+        console.log("LEFT KEY DOWN!!!");
+
+        //debugger;
+      });
+      //debugger;
       this.initSnakeInstance();
       this.head.angle = 90;
 
@@ -364,6 +537,8 @@ class Snake extends Phaser.GameObjects.GameObject {
       //});
 
       //debugger;
+      //this.scene.input.keyboard.enabled = false;
+      //this.scene.input.keyboard.manager.enabled = false;
     }
 
     /* for (let player = 0; player < this.noOfPlayers; player++) {
@@ -396,6 +571,9 @@ class Snake extends Phaser.GameObjects.GameObject {
       this.scene.testFunc2("self", this.player);
     });
     segment.body.setImmovable(true);
+    //console.log(this.segments);
+    segment.ref = this.segments.children.entries.length - 1;
+
     console.log(this.player);
     if (this.player == 0) segment.setTint(0xff0000);
   }
